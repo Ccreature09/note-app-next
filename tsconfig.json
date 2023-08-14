@@ -30,7 +30,8 @@
 		".next/types/**/*.ts",
 		"src/app/firebase/GoogleAuth.jsx",
 		"src/app/firebase/firebase.jsx",
-		"src/app/firebase/database.jsx"
+		"src/app/firebase/database.jsx",
+		"src/app/components/Spinning.js"
 	],
 	"exclude": ["node_modules"]
 }

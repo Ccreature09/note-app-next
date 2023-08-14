@@ -4,9 +4,9 @@ import { Sidebar } from "./components/Sidebar";
 export default function Home() {
 	return (
 		<>
-			<div>
-				<List></List>
+			<div className="flex">
 				<Sidebar></Sidebar>
+				<List></List>
 			</div>
 		</>
 	);
