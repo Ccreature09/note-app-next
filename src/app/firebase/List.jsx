@@ -6,19 +6,19 @@ import cat from "../images/cat.png";
 import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "./firebase";
 
-const shoppingListInDB = ref(database, "shoppingList");
+const ListInDB = ref(database, "shoppingList");
 
 export const List = () => {
 	const [inputValue, setInputValue] = useState("");
 	const [items, setItems] = useState([]);
 
 	const addItem = () => {
-		push(shoppingListInDB, inputValue);
+		push(ListInDB, inputValue);
 		setInputValue("");
 	};
 
 	const removeItem = (itemId) => {
-		const exactLocationOfItemInDB = ref(database, `shoppingList/${itemId}`);
+		const exactLocationOfItemInDB = ref(database, `shoppingLi/${itemId}`);
 		remove(exactLocationOfItemInDB);
 	};
 

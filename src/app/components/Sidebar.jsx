@@ -1,18 +1,14 @@
 "use client";
-<<<<<<< HEAD:src/app/components/Sidebar.tsx
-import { GoogleAuth, GoogleAuthButton, SignOut } from "../firebase/GoogleAuth";
-import CreateList from "./CreateList"; // Remove curly braces
 import { useState } from "react";
-=======
-import { GoogleAuth, GoogleAuthButton } from "../firebase/GoogleAuth";
->>>>>>> parent of e5dad6f (Responsive + Google Signing in and out):src/app/components/Sidebar.jsx
+import { GoogleAuth, GoogleAuthButton, SignOut } from "../firebase/GoogleAuth";
+import { CreateList } from "./CreateList";
 
 export const Sidebar = () => {
 	const userInfo = GoogleAuth();
+
 	const [userLists, setUserLists] = useState([
 		{ id: 1, title: "Shopping List" },
 		{ id: 2, title: "To-Do List" },
-		// ... existing lists
 	]);
 
 	const addNewList = (newList) => {
@@ -39,7 +35,6 @@ export const Sidebar = () => {
 						</div>
 					</div>
 				)}
-<<<<<<< HEAD:src/app/components/Sidebar.tsx
 
 				{userInfo == null ? (
 					<GoogleAuthButton></GoogleAuthButton>
@@ -48,12 +43,6 @@ export const Sidebar = () => {
 				)}
 
 				<CreateList addNewList={addNewList} userLists={userLists}></CreateList>
-=======
-				<GoogleAuthButton></GoogleAuthButton>
-				<button className="bg-blue-600 text-white py-2 px-4 rounded mb-4">
-					Create List
-				</button>
->>>>>>> parent of e5dad6f (Responsive + Google Signing in and out):src/app/components/Sidebar.jsx
 
 				<div className="">
 					<p className="text-white font-semibold mb-2 text-center">
