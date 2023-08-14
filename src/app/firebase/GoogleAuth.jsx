@@ -5,6 +5,7 @@ import {
 	GoogleAuthProvider,
 	signInWithPopup,
 	onAuthStateChanged,
+	signOut,
 } from "firebase/auth";
 
 export const GoogleAuthButton = () => {
@@ -16,6 +17,23 @@ export const GoogleAuthButton = () => {
 				return signInWithPopup(auth, provider);
 			}}>
 			Sign In with Google
+		</button>
+	);
+};
+
+export const SignOut = () => {
+	return (
+		<button
+			className="mb-4 border-none bg-white p-2 rounded font-medium text-[#757575]"
+			onClick={async (e) => {
+				try {
+					await signOut(auth);
+					setUser(null);
+				} catch (error) {
+					console.error("Error signing out:", error);
+				}
+			}}>
+			Sign Out
 		</button>
 	);
 };

@@ -1,5 +1,5 @@
 "use client";
-import { GoogleAuth, GoogleAuthButton } from "../firebase/GoogleAuth";
+import { GoogleAuth, GoogleAuthButton, SignOut } from "../firebase/GoogleAuth";
 
 export const Sidebar = () => {
 	const userInfo = GoogleAuth();
@@ -29,7 +29,13 @@ export const Sidebar = () => {
 						</div>
 					</div>
 				)}
-				<GoogleAuthButton></GoogleAuthButton>
+
+				{userInfo == null ? (
+					<GoogleAuthButton></GoogleAuthButton>
+				) : (
+					<SignOut></SignOut>
+				)}
+
 				<button className="bg-blue-600 text-white py-2 px-4 rounded mb-4">
 					Create List
 				</button>
