@@ -57,5 +57,5 @@ export const GoogleAuth = () => {
 		return () => unsubscribe();
 	}, []);
 
-	return userInfo; // Return the userInfo object
+	return userInfo;
 };

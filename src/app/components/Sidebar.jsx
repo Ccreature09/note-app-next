@@ -54,7 +54,10 @@ export const Sidebar = () => {
 						{userLists.map((list) => (
 							<li
 								key={list.id}
-								className="text-gray-300 cursor-pointer hover:text-white mb-1 text-center">
+								className="text-gray-300 cursor-pointer hover:text-white mb-1 text-center"
+								onClick={() => {
+									setCurrList(list.id);
+								}}>
 								{list.title}
 							</li>
 						))}

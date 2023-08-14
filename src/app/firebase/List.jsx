@@ -18,7 +18,7 @@ export const List = () => {
 	};
 
 	const removeItem = (itemId) => {
-		const exactLocationOfItemInDB = ref(database, `shoppingLi/${itemId}`);
+		const exactLocationOfItemInDB = ref(database, `shoppingList/${itemId}`);
 		remove(exactLocationOfItemInDB);
 	};
 
