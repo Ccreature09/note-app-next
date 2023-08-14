@@ -36,7 +36,7 @@ export const List = () => {
 	}, []);
 
 	return (
-		<div className="flex flex-col max-w-xs my-8 mx-auto max-h-4">
+		<div className="flex flex-col flex-grow max-w-xs my-8 mx-auto max-h-96">
 			<Image
 				width={160}
 				height={160}

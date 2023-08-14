@@ -7,6 +7,19 @@ import {
 	onAuthStateChanged,
 } from "firebase/auth";
 
+export const GoogleAuthButton = () => {
+	return (
+		<button
+			className="mb-4 border-none bg-white p-2 rounded font-medium text-[#757575]"
+			onClick={async (e) => {
+				const provider = await new GoogleAuthProvider();
+				return signInWithPopup(auth, provider);
+			}}>
+			Sign In with Google
+		</button>
+	);
+};
+
 export const GoogleAuth = () => {
 	const [userInfo, setUserInfo] = useState(null);
 
