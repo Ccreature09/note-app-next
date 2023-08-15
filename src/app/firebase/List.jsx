@@ -30,7 +30,7 @@ export const List = ({ selectedListID }) => {
 	};
 
 	const handleInputFocus = () => {
-		setError(""); // Clear error when the input field is focused
+		setError("");
 	};
 
 	const removeItem = (itemId) => {

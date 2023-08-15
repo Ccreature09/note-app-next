@@ -32,9 +32,10 @@
 		"src/app/firebase/firebase.jsx",
 		"src/app/firebase/List.jsx",
 		"src/app/components/Spinning.js",
-		"src/app/components/Sidebar.tsx",
-		"src/app/components/Sidebar.tsx",
-		"src/app/components/Sidebar.tsx"
+		"src/app/components/Sidebar.jsx",
+		"src/app/components/Sidebar.jsx",
+		"src/app/components/Sidebar.jsx",
+		"src/app/components/CreateList.jsx"
 	],
 	"exclude": ["node_modules"]
 }

@@ -15,10 +15,9 @@ export const Sidebar = ({ setSelectedListID }) => {
 	};
 
 	const removeList = (listId) => {
-		// Remove from userLists state
 		setUserLists((prevLists) => prevLists.filter((list) => list.id !== listId));
+		setSelectedListID("default");
 
-		// Remove from Firebase
 		const listRef = ref(database, `lists/${listId}`);
 		remove(listRef);
 	};
@@ -83,7 +82,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 								<button
 									className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded"
 									onClick={(e) => {
-										e.stopPropagation(); // Prevent parent's onClick from firing
+										e.stopPropagation();
 										removeList(list.id);
 									}}>
 									<svg

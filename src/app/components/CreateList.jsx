@@ -15,25 +15,22 @@ export const CreateList = ({ addNewList, userLists }) => {
 
 	const handleCreateList = () => {
 		if (listName.trim() === "") {
-			setError("Please enter a valid list name."); // Set the error message
+			setError("Please enter a valid list name.");
 			return;
 		}
 
 		const newList = {
-			id: 0,
+			id: "",
 			title: listName,
 			type: listType,
 		};
 
-		// Create a reference to the "lists" directory
 		const listsRef = ref(database, "lists");
 
-		// Push the new list to the "lists" directory and get the new reference
 		const listRef = push(listsRef);
 
 		newList.id = listRef.key;
 
-		// Set the data at the new reference using set
 		set(listRef, newList);
 
 		addNewList(newList);
