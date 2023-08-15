@@ -24,7 +24,7 @@ export const GoogleAuthButton = () => {
 export const SignOut = () => {
 	return (
 		<button
-			className="mb-4 border-none bg-white p-2 rounded font-medium text-[#757575]"
+			className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-white"
 			onClick={async (e) => {
 				try {
 					await signOut(auth);

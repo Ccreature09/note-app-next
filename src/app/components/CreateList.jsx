@@ -6,7 +6,6 @@ export const CreateList = ({ addNewList, userLists }) => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [listName, setListName] = useState("");
 	const [listType, setListType] = useState("individual");
-	const [currlistID, setCurrListID] = useState("");
 
 	const toggleOverlay = () => {
 		setShowOverlay(!showOverlay);
@@ -38,7 +37,7 @@ export const CreateList = ({ addNewList, userLists }) => {
 		<div className="relative">
 			<button
 				onClick={toggleOverlay}
-				className="bg-blue-600 text-white py-2 px-4 rounded mb-4 w-full">
+				className="bg-[#70A9A1] text-white py-2 px-4 rounded mb-4 w-full">
 				Create List
 			</button>
 			{showOverlay && (
