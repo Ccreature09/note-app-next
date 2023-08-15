@@ -3,12 +3,21 @@ import { useState } from "react";
 import { GoogleAuth, GoogleAuthButton, SignOut } from "../firebase/GoogleAuth";
 import { CreateList } from "./CreateList";
 
+export const useCustomState = (newValue) => {
+	const [state, setState] = useState("dsd");
+
+	setState("newValue");
+
+	return state;
+};
+
 export const Sidebar = () => {
 	const userInfo = GoogleAuth();
 
+	const [selectedListID, setSelectedListID] = useState("");
+
 	const [userLists, setUserLists] = useState([
-		{ id: 1, title: "Shopping List" },
-		{ id: 2, title: "To-Do List" },
+		{ id: "", title: "Shopping List", type: "individual" },
 	]);
 
 	const addNewList = (newList) => {
@@ -56,7 +65,7 @@ export const Sidebar = () => {
 								key={list.id}
 								className="text-gray-300 cursor-pointer hover:text-white mb-1 text-center"
 								onClick={() => {
-									setCurrList(list.id);
+									setSelectedListID(list.id);
 								}}>
 								{list.title}
 							</li>

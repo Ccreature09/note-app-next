@@ -6,9 +6,9 @@ import cat from "../images/cat.png";
 import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "./firebase";
 
-const ListInDB = ref(database, "shoppingList");
-
 export const List = () => {
+	const ListInDB = ref(database, "shoppingList");
+
 	const [inputValue, setInputValue] = useState("");
 	const [items, setItems] = useState([]);
 
