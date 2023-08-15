@@ -6,12 +6,19 @@ export const CreateList = ({ addNewList, userLists }) => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [listName, setListName] = useState("");
 	const [listType, setListType] = useState("individual");
+	const [error, setError] = useState("");
 
 	const toggleOverlay = () => {
 		setShowOverlay(!showOverlay);
+		setError("");
 	};
 
 	const handleCreateList = () => {
+		if (listName.trim() === "") {
+			setError("Please enter a valid list name."); // Set the error message
+			return;
+		}
+
 		const newList = {
 			id: 0,
 			title: listName,
@@ -37,7 +44,7 @@ export const CreateList = ({ addNewList, userLists }) => {
 		<div className="relative">
 			<button
 				onClick={toggleOverlay}
-				className="bg-[#70A9A1] text-white py-2 px-4 rounded mb-4 w-full">
+				className="mb-4 border-none bg-[#70A9A1] p-2 rounded font-medium text-[#F1FAEE] w-full">
 				Create List
 			</button>
 			{showOverlay && (
@@ -51,6 +58,7 @@ export const CreateList = ({ addNewList, userLists }) => {
 							onChange={(e) => setListName(e.target.value)}
 							className="w-48"
 						/>
+						{error && <p className="text-red-500">{error}</p>}
 						<label>
 							<input
 								type="radio"
