@@ -68,7 +68,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 							<div className="flex items-center justify-between p-4">
 								<li
 									key={list.id}
-									className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto	 ${
+									className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
 										activeListItem === list.id
 											? "bg-[#457B9D]"
 											: "bg-[#1D3557] hover:bg-[#457B9D]"
