@@ -12,12 +12,15 @@ export default function Home() {
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557]">
 				<div>
 					{/* Pass selectedListID to Sidebar */}
-					<Sidebar setSelectedListID={setSelectedListID} />
+					<Sidebar
+						setSelectedListID={setSelectedListID}
+						setListCount={setListCount}
+					/>
 				</div>
 
 				<div className="flex justify-center md:items-center min-h-screen w-full">
 					{/* Pass selectedListID to List */}
-					<List selectedListID={selectedListID} />
+					<List selectedListID={selectedListID} listCount={listCount} />
 				</div>
 			</div>
 		</>

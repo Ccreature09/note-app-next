@@ -7,7 +7,7 @@ import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "./firebase";
 
 export const List = ({ selectedListID }) => {
-	const ListInDB = ref(database, `lists/${selectedListID}/items`);
+	const ListInDB = ref(database, selectedListID);
 
 	const [inputValue, setInputValue] = useState("");
 	const [error, setError] = useState("");
@@ -36,13 +36,13 @@ export const List = ({ selectedListID }) => {
 	const removeItem = (itemId) => {
 		const exactLocationOfItemInDB = ref(
 			database,
-			`lists/${selectedListID}/items/${itemId}`
+			`${selectedListID}/${itemId}`
 		);
 		remove(exactLocationOfItemInDB);
 	};
 
 	useEffect(() => {
-		const listRef = ref(database, `lists/${selectedListID}/items`);
+		const listRef = ref(database, selectedListID);
 		onValue(listRef, (snapshot) => {
 			if (snapshot.exists()) {
 				const listData = snapshot.val();
@@ -52,7 +52,7 @@ export const List = ({ selectedListID }) => {
 				setItems([]);
 			}
 		});
-	}, [`lists/${selectedListID}/items`]);
+	}, [selectedListID]);
 
 	return (
 		<div className="flex flex-col flex-grow max-w-xs my-8 mx-auto max-h-96">
