@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { GoogleAuth, Auth } from "../firebase/GoogleAuth";
 import { CreateList } from "./CreateList";
-import { ref, remove, onValue } from "firebase/database";
+import { ref, remove, onValue, update } from "firebase/database";
 import { database } from "../firebase/firebase";
 
 export const Sidebar = ({ setSelectedListID }) => {
@@ -12,6 +12,9 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 	useEffect(() => {
 		if (userInfo) {
+			const uid = ref(database, `users/${userInfo.uid}`);
+			update(uid, { ["Name"]: userInfo.displayName });
+
 			const userListsRef = ref(database, `users/${userInfo.uid}/lists`);
 			onValue(userListsRef, (snapshot) => {
 				if (snapshot.exists()) {

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import octupus from "../images/octupus.png";
 import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "./firebase";
-import { userInfo } from "os";
+
 import { GoogleAuth } from "./GoogleAuth";
 
 export const List = ({ selectedListID, uID }) => {

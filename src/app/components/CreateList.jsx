@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { onValue, ref, push, remove, set } from "firebase/database";
+import { ref, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 
 export const CreateList = ({ userLists, uid }) => {
@@ -26,9 +26,7 @@ export const CreateList = ({ userLists, uid }) => {
 		};
 
 		const listsRef = ref(database, `users/${uid}/lists`);
-
 		const listRef = push(listsRef);
-
 		newList.id = listRef.key;
 
 		set(listRef, newList);
@@ -75,6 +73,24 @@ export const CreateList = ({ userLists, uid }) => {
 							/>{" "}
 							Group
 						</label>
+						{listType === "group" && (
+							<div>
+								<p>Select Group Members:</p>
+								{authenticatedUsers.map((user) => (
+									<div key={user.uid}>
+										<label>
+											<input
+												type="checkbox"
+												checked={console.log("checked")}
+												onChange={console.log("on change")}
+											/>
+											<img src={user.photoURL} alt={user.displayName} />
+											<span>{user.displayName}</span>
+										</label>
+									</div>
+								))}
+							</div>
+						)}
 						<button
 							className="bg-blue-600 text-white py-2 px-2 rounded mb-4"
 							onClick={handleCreateList}>
