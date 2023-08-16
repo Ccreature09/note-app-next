@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { onValue, ref, push, remove, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 
-export const CreateList = ({ addNewList, userLists }) => {
+export const CreateList = ({ addNewList, userLists, uid }) => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [listName, setListName] = useState("");
 	const [listType, setListType] = useState("individual");
@@ -25,7 +25,7 @@ export const CreateList = ({ addNewList, userLists }) => {
 			type: listType,
 		};
 
-		const listsRef = ref(database, "lists");
+		const listsRef = ref(database, `users/${uid}/lists`);
 
 		const listRef = push(listsRef);
 

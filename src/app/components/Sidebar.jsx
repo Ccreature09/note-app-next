@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoogleAuth, GoogleAuthButton, SignOut } from "../firebase/GoogleAuth";
 import { CreateList } from "./CreateList";
 import { ref, remove } from "firebase/database";
@@ -18,7 +18,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 		setUserLists((prevLists) => prevLists.filter((list) => list.id !== listId));
 		setSelectedListID("default");
 
-		const listRef = ref(database, `lists/${listId}`);
+		const listRef = ref(database, `users/${userInfo.uid}/lists/${listId}`);
 		remove(listRef);
 	};
 
@@ -49,7 +49,10 @@ export const Sidebar = ({ setSelectedListID }) => {
 					<SignOut></SignOut>
 				)}
 
-				<CreateList addNewList={addNewList} userLists={userLists}></CreateList>
+				<CreateList
+					addNewList={addNewList}
+					userLists={userLists}
+					uid={userInfo && userInfo.uid}></CreateList>
 
 				<div className="">
 					{userLists.length > 0 && (

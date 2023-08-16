@@ -6,8 +6,8 @@ import octupus from "../images/octupus.png";
 import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "./firebase";
 
-export const List = ({ selectedListID }) => {
-	const ListInDB = ref(database, selectedListID);
+export const List = ({ selectedListID, uID }) => {
+	const ListInDB = ref(database, `users/${uID}/lists/${selectedListID}/items`);
 
 	const [inputValue, setInputValue] = useState("");
 	const [error, setError] = useState("");
@@ -36,13 +36,13 @@ export const List = ({ selectedListID }) => {
 	const removeItem = (itemId) => {
 		const exactLocationOfItemInDB = ref(
 			database,
-			`${selectedListID}/${itemId}`
+			`users/${uID}/lists/${selectedListID}/items/${itemId}`
 		);
 		remove(exactLocationOfItemInDB);
 	};
 
 	useEffect(() => {
-		const listRef = ref(database, selectedListID);
+		const listRef = ref(database, `users/${uID}/lists/${selectedListID}/items`);
 		onValue(listRef, (snapshot) => {
 			if (snapshot.exists()) {
 				const listData = snapshot.val();
@@ -52,7 +52,7 @@ export const List = ({ selectedListID }) => {
 				setItems([]);
 			}
 		});
-	}, [selectedListID]);
+	}, [`users/${uID}/lists/${selectedListID}/items`]);
 
 	return (
 		<div className="flex flex-col flex-grow max-w-xs my-8 mx-auto max-h-96">

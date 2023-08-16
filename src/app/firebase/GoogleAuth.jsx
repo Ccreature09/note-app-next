@@ -47,8 +47,9 @@ export const GoogleAuth = () => {
 				const displayName = user.displayName;
 				const email = user.email;
 				const photoURL = user.photoURL;
+				const uid = user.uid;
 
-				setUserInfo({ displayName, email, photoURL });
+				setUserInfo({ displayName, email, photoURL, uid });
 			} else {
 				setUserInfo(null);
 			}
