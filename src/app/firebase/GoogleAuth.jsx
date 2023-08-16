@@ -8,32 +8,31 @@ import {
 	signOut,
 } from "firebase/auth";
 
-export const GoogleAuthButton = () => {
-	return (
-		<button
-			className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
-			onClick={async (e) => {
-				const provider = await new GoogleAuthProvider();
-				return signInWithPopup(auth, provider);
-			}}>
-			Sign In with Google
-		</button>
-	);
-};
+export const Auth = () => {
+	const userInfo = GoogleAuth();
 
-export const SignOut = () => {
+	const handleAuthClick = async (e) => {
+		if (userInfo) {
+			try {
+				await signOut(auth);
+			} catch (error) {
+				console.error("Error signing out:", error);
+			}
+		} else {
+			try {
+				const provider = await new GoogleAuthProvider();
+				await signInWithPopup(auth, provider);
+			} catch (error) {
+				console.error("Error signing in:", error);
+			}
+		}
+	};
+
 	return (
 		<button
 			className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
-			onClick={async (e) => {
-				try {
-					await signOut(auth);
-					setUser(null);
-				} catch (error) {
-					console.error("Error signing out:", error);
-				}
-			}}>
-			Sign Out
+			onClick={handleAuthClick}>
+			{userInfo ? "Sign Out" : "Sign In with Google"}
 		</button>
 	);
 };

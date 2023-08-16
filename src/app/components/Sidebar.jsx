@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { GoogleAuth, GoogleAuthButton, SignOut } from "../firebase/GoogleAuth";
+import { GoogleAuth, Auth } from "../firebase/GoogleAuth";
 import { CreateList } from "./CreateList";
-import { ref, remove } from "firebase/database";
+import { ref, remove, onValue } from "firebase/database";
 import { database } from "../firebase/firebase";
 
 export const Sidebar = ({ setSelectedListID }) => {
@@ -10,9 +10,23 @@ export const Sidebar = ({ setSelectedListID }) => {
 	const [activeListItem, setActiveListItem] = useState("");
 	const [userLists, setUserLists] = useState([]);
 
-	const addNewList = (newList) => {
-		setUserLists((prevLists) => [...prevLists, newList]);
-	};
+	useEffect(() => {
+		if (userInfo) {
+			// Fetch user's lists based on UID
+			const userListsRef = ref(database, `users/${userInfo.uid}/lists`);
+			onValue(userListsRef, (snapshot) => {
+				if (snapshot.exists()) {
+					const lists = snapshot.val();
+					const listsArray = Object.values(lists);
+					setUserLists(listsArray);
+				} else {
+					setUserLists([]);
+				}
+			});
+		} else {
+			setUserLists([]);
+		}
+	}, [userInfo]);
 
 	const removeList = (listId) => {
 		setUserLists((prevLists) => prevLists.filter((list) => list.id !== listId));
@@ -43,16 +57,13 @@ export const Sidebar = ({ setSelectedListID }) => {
 					</div>
 				)}
 
-				{userInfo == null ? (
-					<GoogleAuthButton></GoogleAuthButton>
-				) : (
-					<SignOut></SignOut>
-				)}
+				<Auth></Auth>
 
-				<CreateList
-					addNewList={addNewList}
-					userLists={userLists}
-					uid={userInfo && userInfo.uid}></CreateList>
+				{userInfo && (
+					<CreateList
+						userLists={userLists}
+						uid={userInfo && userInfo.uid}></CreateList>
+				)}
 
 				<div className="">
 					{userLists.length > 0 && (

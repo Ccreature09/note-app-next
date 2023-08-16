@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { onValue, ref, push, remove, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 
-export const CreateList = ({ addNewList, userLists, uid }) => {
+export const CreateList = ({ userLists, uid }) => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [listName, setListName] = useState("");
 	const [listType, setListType] = useState("individual");
@@ -33,7 +33,6 @@ export const CreateList = ({ addNewList, userLists, uid }) => {
 
 		set(listRef, newList);
 
-		addNewList(newList);
 		toggleOverlay();
 	};
 

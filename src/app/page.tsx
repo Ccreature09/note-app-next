@@ -5,8 +5,8 @@ import { Sidebar } from "./components/Sidebar";
 import { GoogleAuth } from "./firebase/GoogleAuth";
 export default function Home() {
 	const [selectedListID, setSelectedListID] = useState("default");
-	const [uID, setUID] = useState(null);
 	const userInfo = GoogleAuth();
+
 	return (
 		<>
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557]">
