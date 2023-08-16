@@ -35,7 +35,8 @@
 		"src/app/components/Sidebar.jsx",
 		"src/app/components/Sidebar.jsx",
 		"src/app/components/Sidebar.jsx",
-		"src/app/components/CreateList.jsx"
+		"src/app/components/CreateList.jsx",
+		"src/app/page.jsx"
 	],
 	"exclude": ["node_modules"]
 }

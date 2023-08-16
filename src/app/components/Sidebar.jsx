@@ -12,7 +12,6 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 	useEffect(() => {
 		if (userInfo) {
-			// Fetch user's lists based on UID
 			const userListsRef = ref(database, `users/${userInfo.uid}/lists`);
 			onValue(userListsRef, (snapshot) => {
 				if (snapshot.exists()) {
@@ -25,12 +24,14 @@ export const Sidebar = ({ setSelectedListID }) => {
 			});
 		} else {
 			setUserLists([]);
+			setSelectedListID("default");
 		}
 	}, [userInfo]);
 
 	const removeList = (listId) => {
+		setSelectedListID("default"); // Reset selectedListID to "default"
+
 		setUserLists((prevLists) => prevLists.filter((list) => list.id !== listId));
-		setSelectedListID("default");
 
 		const listRef = ref(database, `users/${userInfo.uid}/lists/${listId}`);
 		remove(listRef);

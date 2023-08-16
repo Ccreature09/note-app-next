@@ -5,8 +5,11 @@ import { useState, useEffect } from "react";
 import octupus from "../images/octupus.png";
 import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "./firebase";
+import { userInfo } from "os";
+import { GoogleAuth } from "./GoogleAuth";
 
 export const List = ({ selectedListID, uID }) => {
+	const userInfo = GoogleAuth();
 	const ListInDB = ref(database, `users/${uID}/lists/${selectedListID}/items`);
 
 	const [inputValue, setInputValue] = useState("");
@@ -63,7 +66,7 @@ export const List = ({ selectedListID, uID }) => {
 				className="w-40 mx-auto mb-5"
 				alt=""
 			/>
-			{selectedListID != "default" && (
+			{selectedListID != "default" && userInfo && (
 				<div>
 					<input
 						className="block p-4 rounded-lg text-xl text-center mb-3 text-[#432000] w-full bg-[#F1FAEE]"
