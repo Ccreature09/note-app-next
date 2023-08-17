@@ -19,7 +19,7 @@ export default function Home() {
 					<Sidebar setSelectedListID={setSelectedListID} uid={setUid} />
 				</div>
 
-				<div className="flex flex-col flex-grow max-w-xs my-8 mx-auto max-h-96">
+				<div className="flex flex-col flex-grow max-w-xs h-auto mx-auto justify-center">
 					<Image
 						width={160}
 						height={160}
@@ -27,7 +27,7 @@ export default function Home() {
 						className="w-40 mx-auto mb-5"
 						alt=""
 					/>
-					<div className="flex justify-center md:items-center min-h-screen w-full">
+					<div className="flex justify-center md:items-center  w-full">
 						{uidToUse && (
 							<List selectedListID={selectedListID} uID={uidToUse} />
 						)}

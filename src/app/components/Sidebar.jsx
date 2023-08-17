@@ -62,22 +62,29 @@ export const Sidebar = ({ setSelectedListID, uid }) => {
 	};
 
 	const handleGuestSignIn = () => {
-		const guestName = prompt("Enter your name as a guest:");
+		if (guestInfo) {
+			setGuestInfo(null);
+			const guestsRef = ref(database, `guests/${guestInfo.uid}`);
 
-		if (guestName) {
-			// Create a unique ID for the guest
-			const guestUidRef = push(ref(database));
-			const guestUid = guestUidRef.key;
+			remove(guestsRef);
+		} else {
+			const guestName = prompt("Enter your name as a guest:");
 
-			setGuestInfo({
-				uid: guestUid,
-				displayName: guestName,
-			});
+			if (guestName) {
+				// Create a unique ID for the guest
+				const guestUidRef = push(ref(database));
+				const guestUid = guestUidRef.key;
 
-			// Update "guests/" with the guest's ID and name
-			const guestsRef = ref(database, `guests/${guestUid}`);
-			set(guestsRef, { Name: guestName });
-			uid = guestUid;
+				setGuestInfo({
+					uid: guestUid,
+					displayName: guestName,
+				});
+
+				// Update "guests/" with the guest's ID and name
+				const guestsRef = ref(database, `guests/${guestUid}`);
+				set(guestsRef, { Name: guestName });
+				uid = guestUid;
+			}
 		}
 	};
 
@@ -102,13 +109,15 @@ export const Sidebar = ({ setSelectedListID, uid }) => {
 					</div>
 				)}
 
-				<Auth></Auth>
+				{!guestInfo && <Auth></Auth>}
 
-				<button
-					className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
-					onClick={handleGuestSignIn}>
-					Sign in as Guest
-				</button>
+				{!userInfo && (
+					<button
+						className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
+						onClick={handleGuestSignIn}>
+						{guestInfo ? "Log out as Guest" : "Sign in as Guest"}
+					</button>
+				)}
 
 				{userInfo || guestInfo ? (
 					<CreateList

@@ -16,7 +16,12 @@ export const List = ({ selectedListID, uID }) => {
 	const [items, setItems] = useState([]);
 
 	const addItem = () => {
-		const ListInDB = ref(`${uidToUse}/lists/${selectedListID}/items`);
+		const ListInDB = ref(
+			database,
+			`${
+				userInfo ? "users" : "guests"
+			}/${uidToUse}/lists/${selectedListID}/items`
+		);
 		if (inputValue.trim() === "") {
 			setError("Please enter a valid item.");
 			return;
