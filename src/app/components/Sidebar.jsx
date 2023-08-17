@@ -1,11 +1,10 @@
-"use client";
 import { useState, useEffect } from "react";
 import { GoogleAuth, Auth } from "../firebase/GoogleAuth";
 import { CreateList } from "./CreateList";
 import { ref, remove, onValue, update, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 
-export const Sidebar = ({ setSelectedListID, uid }) => {
+export const Sidebar = ({ setSelectedListID }) => {
 	const userInfo = GoogleAuth();
 	const [activeListItem, setActiveListItem] = useState("");
 	const [userLists, setUserLists] = useState([]);
@@ -44,7 +43,7 @@ export const Sidebar = ({ setSelectedListID, uid }) => {
 			setUserLists([]);
 			setSelectedListID("default");
 		}
-	}, [userInfo, guestInfo]);
+	}, [userInfo, guestInfo, setSelectedListID]);
 
 	const removeList = (listId) => {
 		setSelectedListID("default"); // Reset selectedListID to "default"
@@ -65,7 +64,6 @@ export const Sidebar = ({ setSelectedListID, uid }) => {
 		if (guestInfo) {
 			setGuestInfo(null);
 			const guestsRef = ref(database, `guests/${guestInfo.uid}`);
-
 			remove(guestsRef);
 		} else {
 			const guestName = prompt("Enter your name as a guest:");
@@ -83,7 +81,6 @@ export const Sidebar = ({ setSelectedListID, uid }) => {
 				// Update "guests/" with the guest's ID and name
 				const guestsRef = ref(database, `guests/${guestUid}`);
 				set(guestsRef, { Name: guestName });
-				uid = guestUid;
 			}
 		}
 	};
@@ -109,7 +106,7 @@ export const Sidebar = ({ setSelectedListID, uid }) => {
 					</div>
 				)}
 
-				{!guestInfo && <Auth></Auth>}
+				{!guestInfo && <Auth />}
 
 				{!userInfo && (
 					<button
@@ -119,12 +116,12 @@ export const Sidebar = ({ setSelectedListID, uid }) => {
 					</button>
 				)}
 
-				{userInfo || guestInfo ? (
+				{(userInfo || guestInfo) && (
 					<CreateList
-						uid={userInfo ? null : guestInfo && guestInfo.uid}
+						uid={userInfo ? null : guestInfo?.uid}
 						userType={userInfo ? "user" : "guest"}
 					/>
-				) : null}
+				)}
 
 				<div className="">
 					{userLists.length > 0 && (
@@ -132,7 +129,6 @@ export const Sidebar = ({ setSelectedListID, uid }) => {
 							<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
 								Your Lists:
 							</p>
-
 							<hr />
 							<br />
 						</div>

@@ -9,7 +9,8 @@ import { GoogleAuth } from "./GoogleAuth";
 
 export const List = ({ selectedListID, uID }) => {
 	const userInfo = GoogleAuth();
-	const uidToUse = userInfo ? userInfo.uid : uID;
+	const guestInfo = uID && !userInfo ? { uid: uID } : null;
+	const uidToUse = userInfo ? userInfo.uid : guestInfo.uid;
 
 	const [inputValue, setInputValue] = useState("");
 	const [error, setError] = useState("");
