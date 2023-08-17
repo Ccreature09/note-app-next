@@ -2,13 +2,14 @@
 import { useState, useEffect } from "react";
 import { GoogleAuth, Auth } from "../firebase/GoogleAuth";
 import { CreateList } from "./CreateList";
-import { ref, remove, onValue, update } from "firebase/database";
+import { ref, remove, onValue, update, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 
-export const Sidebar = ({ setSelectedListID }) => {
+export const Sidebar = ({ setSelectedListID, uid }) => {
 	const userInfo = GoogleAuth();
 	const [activeListItem, setActiveListItem] = useState("");
 	const [userLists, setUserLists] = useState([]);
+	const [guestInfo, setGuestInfo] = useState(null);
 
 	useEffect(() => {
 		if (userInfo) {
@@ -25,19 +26,59 @@ export const Sidebar = ({ setSelectedListID }) => {
 					setUserLists([]);
 				}
 			});
+		} else if (guestInfo) {
+			const uid = ref(database, `guests/${guestInfo.uid}`);
+			update(uid, { ["Name"]: guestInfo.displayName });
+
+			const userListsRef = ref(database, `guests/${guestInfo.uid}/lists`);
+			onValue(userListsRef, (snapshot) => {
+				if (snapshot.exists()) {
+					const lists = snapshot.val();
+					const listsArray = Object.values(lists);
+					setUserLists(listsArray);
+				} else {
+					setUserLists([]);
+				}
+			});
 		} else {
 			setUserLists([]);
 			setSelectedListID("default");
 		}
-	}, [userInfo]);
+	}, [userInfo, guestInfo]);
 
 	const removeList = (listId) => {
 		setSelectedListID("default"); // Reset selectedListID to "default"
 
 		setUserLists((prevLists) => prevLists.filter((list) => list.id !== listId));
 
-		const listRef = ref(database, `users/${userInfo.uid}/lists/${listId}`);
+		let listRef;
+		if (userInfo) {
+			listRef = ref(database, `users/${userInfo.uid}/lists/${listId}`);
+		} else {
+			listRef = ref(database, `guests/${guestInfo.uid}/lists/${listId}`);
+		}
+
 		remove(listRef);
+	};
+
+	const handleGuestSignIn = () => {
+		const guestName = prompt("Enter your name as a guest:");
+
+		if (guestName) {
+			// Create a unique ID for the guest
+			const guestUidRef = push(ref(database));
+			const guestUid = guestUidRef.key;
+
+			setGuestInfo({
+				uid: guestUid,
+				displayName: guestName,
+			});
+
+			// Update "guests/" with the guest's ID and name
+			const guestsRef = ref(database, `guests/${guestUid}`);
+			set(guestsRef, { Name: guestName });
+			uid = guestUid;
+		}
 	};
 
 	return (
@@ -63,11 +104,18 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 				<Auth></Auth>
 
-				{userInfo && (
+				<button
+					className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
+					onClick={handleGuestSignIn}>
+					Sign in as Guest
+				</button>
+
+				{userInfo || guestInfo ? (
 					<CreateList
-						userLists={userLists}
-						uid={userInfo && userInfo.uid}></CreateList>
-				)}
+						uid={userInfo ? null : guestInfo && guestInfo.uid}
+						userType={userInfo ? "user" : "guest"}
+					/>
+				) : null}
 
 				<div className="">
 					{userLists.length > 0 && (

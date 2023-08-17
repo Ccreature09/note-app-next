@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import octupus from "../images/octupus.png";
+
 import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "./firebase";
 
@@ -10,13 +9,14 @@ import { GoogleAuth } from "./GoogleAuth";
 
 export const List = ({ selectedListID, uID }) => {
 	const userInfo = GoogleAuth();
-	const ListInDB = ref(database, `users/${uID}/lists/${selectedListID}/items`);
+	const uidToUse = userInfo ? userInfo.uid : uID;
 
 	const [inputValue, setInputValue] = useState("");
 	const [error, setError] = useState("");
 	const [items, setItems] = useState([]);
 
 	const addItem = () => {
+		const ListInDB = ref(`${uidToUse}/lists/${selectedListID}/items`);
 		if (inputValue.trim() === "") {
 			setError("Please enter a valid item.");
 			return;
@@ -39,13 +39,20 @@ export const List = ({ selectedListID, uID }) => {
 	const removeItem = (itemId) => {
 		const exactLocationOfItemInDB = ref(
 			database,
-			`users/${uID}/lists/${selectedListID}/items/${itemId}`
+			`${
+				userInfo ? "users" : "guests"
+			}/${uidToUse}/lists/${selectedListID}/items/${itemId}`
 		);
 		remove(exactLocationOfItemInDB);
 	};
 
 	useEffect(() => {
-		const listRef = ref(database, `users/${uID}/lists/${selectedListID}/items`);
+		const listRef = ref(
+			database,
+			`${
+				userInfo ? "users" : "guests"
+			}/${uidToUse}/lists/${selectedListID}/items`
+		);
 		onValue(listRef, (snapshot) => {
 			if (snapshot.exists()) {
 				const listData = snapshot.val();
@@ -55,18 +62,15 @@ export const List = ({ selectedListID, uID }) => {
 				setItems([]);
 			}
 		});
-	}, [`users/${uID}/lists/${selectedListID}/items`]);
+	}, [
+		`${
+			userInfo ? "users" : "guests"
+		}/${uidToUse}/lists/${selectedListID}/items/`,
+	]);
 
 	return (
-		<div className="flex flex-col flex-grow max-w-xs my-8 mx-auto max-h-96">
-			<Image
-				width={160}
-				height={160}
-				src={octupus}
-				className="w-40 mx-auto mb-5"
-				alt=""
-			/>
-			{selectedListID != "default" && userInfo && (
+		<>
+			{selectedListID != "default" && uidToUse && (
 				<div>
 					<input
 						className="block p-4 rounded-lg text-xl text-center mb-3 text-[#432000] w-full bg-[#F1FAEE]"
@@ -95,6 +99,6 @@ export const List = ({ selectedListID, uID }) => {
 					</ul>
 				</div>
 			)}
-		</div>
+		</>
 	);
 };
