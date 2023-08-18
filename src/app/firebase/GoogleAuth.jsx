@@ -8,7 +8,7 @@ import {
 	signOut,
 } from "firebase/auth";
 
-export const Auth = () => {
+export const GoogleAuthButton = () => {
 	const userInfo = GoogleAuth();
 
 	const handleAuthClick = async (e) => {
@@ -32,7 +32,7 @@ export const Auth = () => {
 		<button
 			className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
 			onClick={handleAuthClick}>
-			{userInfo ? "Sign Out" : "Sign In with Google"}
+			{userInfo ? "Sign Out With Google" : "Sign In with Google"}
 		</button>
 	);
 };
@@ -43,12 +43,15 @@ export const GoogleAuth = () => {
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			if (user) {
-				const displayName = user.displayName;
-				const email = user.email;
-				const photoURL = user.photoURL;
-				const uid = user.uid;
+				if (user.providerData[0]?.providerId == "google.com") {
+					console.log("google.com");
+					const displayName = user.displayName;
+					const email = user.email;
+					const photoURL = user.photoURL;
+					const uid = user.uid;
 
-				setUserInfo({ displayName, email, photoURL, uid });
+					setUserInfo({ displayName, email, photoURL, uid });
+				}
 			} else {
 				setUserInfo(null);
 			}

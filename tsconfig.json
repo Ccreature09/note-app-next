@@ -30,7 +30,7 @@
 		".next/types/**/*.ts",
 		"src/app/firebase/GoogleAuth.jsx",
 		"src/app/firebase/firebase.jsx",
-		"src/app/firebase/List.jsx",
+		"src/app/components/List.jsx",
 		"src/app/components/Spinning.js",
 		"src/app/components/Sidebar.jsx",
 		"src/app/components/Sidebar.jsx",

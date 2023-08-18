@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { GoogleAuth, Auth } from "../firebase/GoogleAuth";
+import { GoogleAuth, GoogleAuthButton } from "../firebase/GoogleAuth";
+import { GuestAuth, GuestAuthButton } from "../firebase/GuestAuth";
 import { CreateList } from "./CreateList";
 import { ref, remove, onValue, update, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 
 export const Sidebar = ({ setSelectedListID }) => {
 	const userInfo = GoogleAuth();
+	const guestInfo = GuestAuth();
 	const [activeListItem, setActiveListItem] = useState("");
 	const [userLists, setUserLists] = useState([]);
-	const [guestInfo, setGuestInfo] = useState(null);
 
 	useEffect(() => {
 		if (userInfo) {
@@ -25,10 +26,8 @@ export const Sidebar = ({ setSelectedListID }) => {
 					setUserLists([]);
 				}
 			});
-		} else if (guestInfo) {
-			const uid = ref(database, `guests/${guestInfo.uid}`);
-			update(uid, { ["Name"]: guestInfo.displayName });
-
+		}
+		if (guestInfo) {
 			const userListsRef = ref(database, `guests/${guestInfo.uid}/lists`);
 			onValue(userListsRef, (snapshot) => {
 				if (snapshot.exists()) {
@@ -46,43 +45,19 @@ export const Sidebar = ({ setSelectedListID }) => {
 	}, [userInfo, guestInfo, setSelectedListID]);
 
 	const removeList = (listId) => {
-		setSelectedListID("default"); // Reset selectedListID to "default"
+		setSelectedListID("default");
 
 		setUserLists((prevLists) => prevLists.filter((list) => list.id !== listId));
 
 		let listRef;
+		if (guestInfo) {
+			listRef = ref(database, `guests/${guestInfo.uid}/lists/${listId}`);
+		}
 		if (userInfo) {
 			listRef = ref(database, `users/${userInfo.uid}/lists/${listId}`);
-		} else {
-			listRef = ref(database, `guests/${guestInfo.uid}/lists/${listId}`);
 		}
 
 		remove(listRef);
-	};
-
-	const handleGuestSignIn = () => {
-		if (guestInfo) {
-			setGuestInfo(null);
-			const guestsRef = ref(database, `guests/${guestInfo.uid}`);
-			remove(guestsRef);
-		} else {
-			const guestName = prompt("Enter your name as a guest:");
-
-			if (guestName) {
-				// Create a unique ID for the guest
-				const guestUidRef = push(ref(database));
-				const guestUid = guestUidRef.key;
-
-				setGuestInfo({
-					uid: guestUid,
-					displayName: guestName,
-				});
-
-				// Update "guests/" with the guest's ID and name
-				const guestsRef = ref(database, `guests/${guestUid}`);
-				set(guestsRef, { Name: guestName });
-			}
-		}
 	};
 
 	return (
@@ -105,23 +80,24 @@ export const Sidebar = ({ setSelectedListID }) => {
 						</div>
 					</div>
 				)}
+				{!guestInfo && "guest null"}
+				{!userInfo && "userinfo null"}
+				{guestInfo && "guest "}
+				{userInfo && "userinfo "}
 
-				{!guestInfo && <Auth />}
-
-				{!userInfo && (
-					<button
-						className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
-						onClick={handleGuestSignIn}>
-						{guestInfo ? "Log out as Guest" : "Sign in as Guest"}
-					</button>
+				{!guestInfo && !userInfo ? (
+					<>
+						<GoogleAuthButton></GoogleAuthButton>
+						<GuestAuthButton></GuestAuthButton>
+					</>
+				) : guestInfo ? (
+					<GuestAuthButton />
+				) : (
+					userInfo && <GoogleAuthButton />
 				)}
+				{}
 
-				{(userInfo || guestInfo) && (
-					<CreateList
-						uid={userInfo ? null : guestInfo?.uid}
-						userType={userInfo ? "user" : "guest"}
-					/>
-				)}
+				{(userInfo || guestInfo) && <CreateList />}
 
 				<div className="">
 					{userLists.length > 0 && (

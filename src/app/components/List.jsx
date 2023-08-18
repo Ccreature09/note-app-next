@@ -3,14 +3,16 @@
 import { useState, useEffect } from "react";
 
 import { onValue, ref, push, remove } from "firebase/database";
-import { database } from "./firebase";
+import { database } from "../firebase/firebase";
 
-import { GoogleAuth } from "./GoogleAuth";
+import { GoogleAuth } from "../firebase/GoogleAuth";
+import { GuestAuth } from "../firebase/GuestAuth";
 
-export const List = ({ selectedListID, uID }) => {
+export const List = ({ selectedListID }) => {
 	const userInfo = GoogleAuth();
-	const guestInfo = uID && !userInfo ? { uid: uID } : null;
-	const uidToUse = userInfo ? userInfo.uid : guestInfo.uid;
+	const guestInfo = GuestAuth();
+
+	const uidToUse = userInfo ? userInfo.uid : guestInfo && guestInfo.uid;
 
 	const [inputValue, setInputValue] = useState("");
 	const [error, setError] = useState("");
@@ -20,7 +22,7 @@ export const List = ({ selectedListID, uID }) => {
 		const ListInDB = ref(
 			database,
 			`${
-				userInfo ? "users" : "guests"
+				guestInfo ? "guests" : userInfo && "users"
 			}/${uidToUse}/lists/${selectedListID}/items`
 		);
 		if (inputValue.trim() === "") {
@@ -46,7 +48,7 @@ export const List = ({ selectedListID, uID }) => {
 		const exactLocationOfItemInDB = ref(
 			database,
 			`${
-				userInfo ? "users" : "guests"
+				guestInfo ? "guests" : userInfo && "users"
 			}/${uidToUse}/lists/${selectedListID}/items/${itemId}`
 		);
 		remove(exactLocationOfItemInDB);
@@ -56,7 +58,7 @@ export const List = ({ selectedListID, uID }) => {
 		const listRef = ref(
 			database,
 			`${
-				userInfo ? "users" : "guests"
+				guestInfo ? "guests" : userInfo && "users"
 			}/${uidToUse}/lists/${selectedListID}/items`
 		);
 		onValue(listRef, (snapshot) => {
@@ -70,8 +72,8 @@ export const List = ({ selectedListID, uID }) => {
 		});
 	}, [
 		`${
-			userInfo ? "users" : "guests"
-		}/${uidToUse}/lists/${selectedListID}/items/`,
+			guestInfo ? "guests" : userInfo && "users"
+		}/${uidToUse}/lists/${selectedListID}/items`,
 	]);
 
 	return (

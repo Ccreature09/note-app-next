@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { List } from "./firebase/List";
+import { List } from "./components/List";
 import { Sidebar } from "./components/Sidebar";
 import { GoogleAuth } from "./firebase/GoogleAuth";
 import Image from "next/image";
@@ -10,7 +10,7 @@ export default function Home() {
 	const [selectedListID, setSelectedListID] = useState("default");
 	const [guestUid, setGuestUid] = useState(null);
 	const userInfo = GoogleAuth();
-	const uidToUse = guestUid || (userInfo && userInfo.uid);
+	const uidToUse = guestUid ? guestUid : userInfo && userInfo;
 
 	return (
 		<>
@@ -27,8 +27,9 @@ export default function Home() {
 						className="w-40 mx-auto mb-5"
 						alt=""
 					/>
+
 					<div className="flex justify-center md:items-center  w-full">
-						{uidToUse && (
+						{userInfo && (
 							<List selectedListID={selectedListID} uID={uidToUse} />
 						)}
 					</div>
