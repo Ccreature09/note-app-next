@@ -7,7 +7,10 @@ import { database } from "../firebase/firebase";
 
 export const Sidebar = ({ setSelectedListID }) => {
 	const userInfo = Auth();
-
+	const isAnonymous = userInfo && userInfo.isAnonymous;
+	const img = userInfo && userInfo.photoURL;
+	const name = userInfo && userInfo.displayName;
+	const email = userInfo && userInfo.email;
 	const [activeListItem, setActiveListItem] = useState("");
 	const [userLists, setUserLists] = useState([]);
 
@@ -61,19 +64,17 @@ export const Sidebar = ({ setSelectedListID }) => {
 	return (
 		<div className="">
 			<div className="flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64">
-				{userInfo && (
+				{userInfo && isAnonymous && (
+					<p className="text-[#F1FAEE] font-semibold text-6xl p-5">Guest</p>
+				)}
+
+				{userInfo && !isAnonymous && (
 					<div className="flex items-center justify-center space-x-4 mb-6">
-						<img
-							src={userInfo.photoURL}
-							alt="Profile"
-							className="w-12 h-12 rounded-full"
-						/>
+						<img src={img} alt="Profile" className="w-12 h-12 rounded-full" />
 						<div className="flex flex-col ">
-							<p className="text-[#F1FAEE] font-semibold text-lg">
-								{userInfo.displayName}
-							</p>
+							<p className="text-[#F1FAEE] font-semibold text-lg">{name}</p>
 							<p className="text-[#F1FAEE] text-sm truncate md:w-auto">
-								{userInfo.email}
+								{email}
 							</p>
 						</div>
 					</div>

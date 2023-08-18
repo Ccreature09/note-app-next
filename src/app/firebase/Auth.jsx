@@ -31,9 +31,9 @@ export const GoogleAuthButton = () => {
 
 	return (
 		<button
-			className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
+			className="mb-4 border-none bg-green-500 p-2 rounded font-medium text-[#F1FAEE]"
 			onClick={handleAuthClick}>
-			{userInfo ? "Sign Out With Google" : "Sign In with Google"}
+			{userInfo ? "Sign Out" : "Sign In with Google"}
 		</button>
 	);
 };
@@ -62,9 +62,9 @@ export const GuestAuthButton = () => {
 
 	return (
 		<button
-			className="mb-4 border-none bg-[#457B9D] p-2 rounded font-medium text-[#F1FAEE]"
+			className="mb-4 border-none bg-gray-500 p-2 rounded font-medium text-[#F1FAEE]"
 			onClick={handleAuthClick}>
-			{guestInfo ? "Sign Out with Guest" : "Sign In with Guest"}
+			{guestInfo ? "Sign Out" : "Sign In as Guest"}
 		</button>
 	);
 };
