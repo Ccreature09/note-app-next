@@ -1,34 +1,30 @@
 import { useState, useEffect } from "react";
-import { GoogleAuth, GoogleAuthButton } from "../firebase/GoogleAuth";
-import { GuestAuth, GuestAuthButton } from "../firebase/GuestAuth";
+import { Auth, GoogleAuthButton, GuestAuthButton } from "../firebase/Auth";
+
 import { CreateList } from "./CreateList";
 import { ref, remove, onValue, update, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 
 export const Sidebar = ({ setSelectedListID }) => {
-	const userInfo = GoogleAuth();
-	const guestInfo = GuestAuth();
+	const userInfo = Auth();
+
 	const [activeListItem, setActiveListItem] = useState("");
 	const [userLists, setUserLists] = useState([]);
 
 	useEffect(() => {
 		if (userInfo) {
-			const uid = ref(database, `users/${userInfo.uid}`);
-			update(uid, { ["Name"]: userInfo.displayName });
+			if (!userInfo.isAnonymous) {
+				const uid = ref(
+					database,
+					`${userInfo.isAnonymous ? "guests" : "users"}/${userInfo.uid}`
+				);
+				update(uid, { ["Name"]: userInfo.displayName });
+			}
 
-			const userListsRef = ref(database, `users/${userInfo.uid}/lists`);
-			onValue(userListsRef, (snapshot) => {
-				if (snapshot.exists()) {
-					const lists = snapshot.val();
-					const listsArray = Object.values(lists);
-					setUserLists(listsArray);
-				} else {
-					setUserLists([]);
-				}
-			});
-		}
-		if (guestInfo) {
-			const userListsRef = ref(database, `guests/${guestInfo.uid}/lists`);
+			const userListsRef = ref(
+				database,
+				`${userInfo.isAnonymous ? "guests" : "users"}/${userInfo.uid}/lists`
+			);
 			onValue(userListsRef, (snapshot) => {
 				if (snapshot.exists()) {
 					const lists = snapshot.val();
@@ -42,7 +38,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 			setUserLists([]);
 			setSelectedListID("default");
 		}
-	}, [userInfo, guestInfo, setSelectedListID]);
+	}, [userInfo, setSelectedListID]);
 
 	const removeList = (listId) => {
 		setSelectedListID("default");
@@ -50,11 +46,13 @@ export const Sidebar = ({ setSelectedListID }) => {
 		setUserLists((prevLists) => prevLists.filter((list) => list.id !== listId));
 
 		let listRef;
-		if (guestInfo) {
-			listRef = ref(database, `guests/${guestInfo.uid}/lists/${listId}`);
-		}
 		if (userInfo) {
-			listRef = ref(database, `users/${userInfo.uid}/lists/${listId}`);
+			listRef = ref(
+				database,
+				`${userInfo.isAnonymous ? "guests" : "users"}/${
+					userInfo.uid
+				}/lists/${listId}`
+			);
 		}
 
 		remove(listRef);
@@ -80,24 +78,20 @@ export const Sidebar = ({ setSelectedListID }) => {
 						</div>
 					</div>
 				)}
-				{!guestInfo && "guest null"}
-				{!userInfo && "userinfo null"}
-				{guestInfo && "guest "}
-				{userInfo && "userinfo "}
 
-				{!guestInfo && !userInfo ? (
+				{!userInfo ? (
 					<>
 						<GoogleAuthButton></GoogleAuthButton>
 						<GuestAuthButton></GuestAuthButton>
 					</>
-				) : guestInfo ? (
+				) : userInfo.isAnonymous ? (
 					<GuestAuthButton />
 				) : (
-					userInfo && <GoogleAuthButton />
+					<GoogleAuthButton />
 				)}
 				{}
 
-				{(userInfo || guestInfo) && <CreateList />}
+				{userInfo && <CreateList />}
 
 				<div className="">
 					{userLists.length > 0 && (

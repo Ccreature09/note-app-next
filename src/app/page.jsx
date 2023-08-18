@@ -2,15 +2,14 @@
 import { useState } from "react";
 import { List } from "./components/List";
 import { Sidebar } from "./components/Sidebar";
-import { GoogleAuth } from "./firebase/GoogleAuth";
+import { Auth } from "./firebase/Auth";
 import Image from "next/image";
 import octupus from "./images/octupus.png";
 
 export default function Home() {
 	const [selectedListID, setSelectedListID] = useState("default");
 	const [guestUid, setGuestUid] = useState(null);
-	const userInfo = GoogleAuth();
-	const uidToUse = guestUid ? guestUid : userInfo && userInfo;
+	const userInfo = Auth();
 
 	return (
 		<>
@@ -30,7 +29,7 @@ export default function Home() {
 
 					<div className="flex justify-center md:items-center  w-full">
 						{userInfo && (
-							<List selectedListID={selectedListID} uID={uidToUse} />
+							<List selectedListID={selectedListID} uID={userInfo.uid} />
 						)}
 					</div>
 				</div>

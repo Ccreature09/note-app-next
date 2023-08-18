@@ -5,14 +5,12 @@ import { useState, useEffect } from "react";
 import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "../firebase/firebase";
 
-import { GoogleAuth } from "../firebase/GoogleAuth";
-import { GuestAuth } from "../firebase/GuestAuth";
+import { Auth } from "../firebase/Auth";
 
 export const List = ({ selectedListID }) => {
-	const userInfo = GoogleAuth();
-	const guestInfo = GuestAuth();
-
-	const uidToUse = userInfo ? userInfo.uid : guestInfo && guestInfo.uid;
+	const userInfo = Auth();
+	const isAnonymous = userInfo && userInfo.isAnonymous;
+	const uid = userInfo && userInfo.uid;
 
 	const [inputValue, setInputValue] = useState("");
 	const [error, setError] = useState("");
@@ -21,9 +19,9 @@ export const List = ({ selectedListID }) => {
 	const addItem = () => {
 		const ListInDB = ref(
 			database,
-			`${
-				guestInfo ? "guests" : userInfo && "users"
-			}/${uidToUse}/lists/${selectedListID}/items`
+			`${userInfo.isAnonymous ? "guests" : "users"}/${
+				userInfo.uid
+			}/lists/${selectedListID}/items`
 		);
 		if (inputValue.trim() === "") {
 			setError("Please enter a valid item.");
@@ -48,8 +46,8 @@ export const List = ({ selectedListID }) => {
 		const exactLocationOfItemInDB = ref(
 			database,
 			`${
-				guestInfo ? "guests" : userInfo && "users"
-			}/${uidToUse}/lists/${selectedListID}/items/${itemId}`
+				isAnonymous ? "guests" : "users"
+			}/${uid}/lists/${selectedListID}/items/${itemId}`
 		);
 		remove(exactLocationOfItemInDB);
 	};
@@ -57,9 +55,7 @@ export const List = ({ selectedListID }) => {
 	useEffect(() => {
 		const listRef = ref(
 			database,
-			`${
-				guestInfo ? "guests" : userInfo && "users"
-			}/${uidToUse}/lists/${selectedListID}/items`
+			`${isAnonymous ? "guests" : "users"}/${uid}/lists/${selectedListID}/items`
 		);
 		onValue(listRef, (snapshot) => {
 			if (snapshot.exists()) {
@@ -71,14 +67,12 @@ export const List = ({ selectedListID }) => {
 			}
 		});
 	}, [
-		`${
-			guestInfo ? "guests" : userInfo && "users"
-		}/${uidToUse}/lists/${selectedListID}/items`,
+		`${isAnonymous ? "guests" : "users"}/${uid}/lists/${selectedListID}/items`,
 	]);
 
 	return (
 		<>
-			{selectedListID != "default" && uidToUse && (
+			{selectedListID != "default" && userInfo.uid && (
 				<div>
 					<input
 						className="block p-4 rounded-lg text-xl text-center mb-3 text-[#432000] w-full bg-[#F1FAEE]"

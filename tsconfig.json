@@ -28,7 +28,7 @@
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"src/app/firebase/GoogleAuth.jsx",
+		"src/app/firebase/Auth.jsx",
 		"src/app/firebase/firebase.jsx",
 		"src/app/components/List.jsx",
 		"src/app/components/Spinning.js",

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { ref, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
-import { GoogleAuth } from "../firebase/GoogleAuth";
-import { GuestAuth } from "../firebase/GuestAuth";
+import { Auth } from "../firebase/Auth";
 
 export const CreateList = () => {
-	const userInfo = GoogleAuth();
-	const guestInfo = GuestAuth();
+	const userInfo = Auth();
+
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [listName, setListName] = useState("");
 	const [listType, setListType] = useState("individual");
@@ -30,11 +29,12 @@ export const CreateList = () => {
 		};
 
 		let listsRef;
-		if (guestInfo) {
-			listsRef = ref(database, `guests/${guestInfo.uid}/lists`);
-		}
+
 		if (userInfo) {
-			listsRef = ref(database, `users/${userInfo.uid}/lists`);
+			listsRef = ref(
+				database,
+				`${userInfo.isAnonymous ? "guests" : "users"}/${userInfo.uid}/lists`
+			);
 		}
 
 		const listRef = push(listsRef);
