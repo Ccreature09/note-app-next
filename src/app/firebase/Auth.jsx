@@ -44,7 +44,10 @@ export const GuestAuthButton = () => {
 	const handleAuthClick = async (e) => {
 		if (guestInfo) {
 			try {
-				await signOut(auth);
+				if (guestInfo.isAnonymous) {
+					// Delete the anonymous account before signing out
+					await auth.currentUser.delete();
+				}
 			} catch (error) {
 				console.error("Error signing out:", error);
 			}
