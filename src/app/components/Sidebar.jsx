@@ -4,7 +4,6 @@ import { Auth, GoogleAuthButton, GuestAuthButton } from "../firebase/Auth";
 import { CreateList } from "./CreateList";
 import { ref, remove, onValue, update, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
-import { Image } from "next/image";
 
 export const Sidebar = ({ setSelectedListID }) => {
 	const userInfo = Auth();
@@ -94,6 +93,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 			{userInfo && !isAnonymous && (
 				<div className="flex items-center justify-center space-x-4 mb-6">
+					<img src={img} alt="Profile" className="w-12 h-12 rounded-full" />
 					<div className="flex flex-col ">
 						<p className="text-[#F1FAEE] font-semibold text-lg">{name}</p>
 						<p className="text-[#F1FAEE] text-sm truncate md:w-auto">{email}</p>
@@ -111,6 +111,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 			) : (
 				<GoogleAuthButton />
 			)}
+			{}
 
 			{userInfo && <CreateList />}
 
