@@ -48,6 +48,7 @@ export const GuestAuthButton = () => {
 					// Delete the anonymous account before signing out
 					await auth.currentUser.delete();
 				}
+				await signOut(auth);
 			} catch (error) {
 				console.error("Error signing out:", error);
 			}

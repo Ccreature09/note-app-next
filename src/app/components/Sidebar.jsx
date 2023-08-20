@@ -13,6 +13,11 @@ export const Sidebar = ({ setSelectedListID }) => {
 	const email = userInfo && userInfo.email;
 	const [activeListItem, setActiveListItem] = useState("");
 	const [userLists, setUserLists] = useState([]);
+	const [isListCollapsed, setListCollapsed] = useState(false);
+
+	const toggleListCollapse = () => {
+		setListCollapsed((prevCollapsed) => !prevCollapsed);
+	};
 
 	useEffect(() => {
 		if (userInfo) {
@@ -62,88 +67,137 @@ export const Sidebar = ({ setSelectedListID }) => {
 	};
 
 	return (
-		<div className="">
-			<div className="flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64">
-				{userInfo && isAnonymous && (
-					<p className="text-[#F1FAEE] font-semibold text-6xl p-5">Guest</p>
-				)}
+		<div className="flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64">
+			{userInfo && isAnonymous && (
+				<svg
+					width="100px"
+					height="100px"
+					viewBox="0 0 16 16"
+					className="p-3 w-auto mb-3"
+					xmlns="http://www.w3.org/2000/svg">
+					<path
+						fill-rule="evenodd"
+						clip-rule="evenodd"
+						d="M5.371 1.072a1 1 0 00-1.32.612L2.28 7H1a1 1 0 000 2h14a1 1 0 100-2h-1.28l-1.77-5.316a1 1 0 00-1.32-.612L8 2.123 5.371 1.072zM11.613 7l-1.226-3.678-2.016.806a1 1 0 01-.742 0l-2.016-.806L4.387 7h7.226z"
+						fill="#000000"
+					/>
+					<path
+						d="M2 11a1 1 0 100 2c.552 0 .98.475 1.244.959A2 2 0 005 15h.558a2 2 0 001.898-1.367l.105-.317a.463.463 0 01.878 0l.105.316A2 2 0 0010.441 15H11a2 2 0 001.755-1.041c.266-.484.693-.959 1.245-.959a1 1 0 100-2H2z"
+						fill="#000000"
+					/>
+				</svg>
+			)}
 
-				{userInfo && !isAnonymous && (
-					<div className="flex items-center justify-center space-x-4 mb-6">
-						<img src={img} alt="Profile" className="w-12 h-12 rounded-full" />
-						<div className="flex flex-col ">
-							<p className="text-[#F1FAEE] font-semibold text-lg">{name}</p>
-							<p className="text-[#F1FAEE] text-sm truncate md:w-auto">
-								{email}
-							</p>
-						</div>
+			{userInfo && !isAnonymous && (
+				<div className="flex items-center justify-center space-x-4 mb-6">
+					<img src={img} alt="Profile" className="w-12 h-12 rounded-full" />
+					<div className="flex flex-col ">
+						<p className="text-[#F1FAEE] font-semibold text-lg">{name}</p>
+						<p className="text-[#F1FAEE] text-sm truncate md:w-auto">{email}</p>
+					</div>
+				</div>
+			)}
+
+			{!userInfo ? (
+				<>
+					<GoogleAuthButton></GoogleAuthButton>
+					<GuestAuthButton></GuestAuthButton>
+				</>
+			) : userInfo.isAnonymous ? (
+				<GuestAuthButton />
+			) : (
+				<GoogleAuthButton />
+			)}
+			{}
+
+			{userInfo && <CreateList />}
+
+			<div>
+				{userLists.length > 0 && (
+					<div>
+						<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
+							<button
+								className="text-[#F1FAEE] font-semibold text-sm mb-2 cursor-pointer py-1 px-52 lg:px-24 md:px-24 border-white border-2 rounded-lg"
+								onClick={toggleListCollapse}>
+								{isListCollapsed ? (
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										strokeWidth={1.5}
+										stroke="currentColor"
+										className="w-6 h-6">
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+										/>
+									</svg>
+								) : (
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										strokeWidth="1.5"
+										stroke="currentColor"
+										className="w-6 h-6">
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5"
+										/>
+									</svg>
+								)}
+							</button>{" "}
+							<br />
+							Your Lists:
+						</p>
+
+						<hr />
+						<br />
 					</div>
 				)}
 
-				{!userInfo ? (
-					<>
-						<GoogleAuthButton></GoogleAuthButton>
-						<GuestAuthButton></GuestAuthButton>
-					</>
-				) : userInfo.isAnonymous ? (
-					<GuestAuthButton />
-				) : (
-					<GoogleAuthButton />
-				)}
-				{}
-
-				{userInfo && <CreateList />}
-
-				<div className="">
-					{userLists.length > 0 && (
-						<div>
-							<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
-								Your Lists:
-							</p>
-							<hr />
-							<br />
+				<ul>
+					{userLists.map((list) => (
+						<div
+							className={`flex items-center justify-between p-4 ${
+								isListCollapsed ? "hidden" : ""
+							}`}
+							key={list.id}>
+							<li
+								className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
+									activeListItem === list.id
+										? "bg-[#457B9D]"
+										: "bg-[#1D3557] hover:bg-[#457B9D]"
+								}`}
+								onClick={() => {
+									setActiveListItem(list.id);
+									setSelectedListID(list.id);
+								}}>
+								{list.title}
+							</li>
+							<button
+								className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded"
+								onClick={(e) => {
+									e.stopPropagation();
+									removeList(list.id);
+								}}>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+									fill="currentColor"
+									className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
+									<path
+										fillRule="evenodd"
+										d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
+										clipRule="evenodd"
+									/>
+								</svg>
+							</button>
 						</div>
-					)}
-
-					<ul>
-						{userLists.map((list) => (
-							<div
-								className="flex items-center justify-between p-4"
-								key={list.id}>
-								<li
-									className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
-										activeListItem === list.id
-											? "bg-[#457B9D]"
-											: "bg-[#1D3557] hover:bg-[#457B9D]"
-									}`}
-									onClick={() => {
-										setActiveListItem(list.id);
-										setSelectedListID(list.id);
-									}}>
-									{list.title}
-								</li>
-								<button
-									className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded"
-									onClick={(e) => {
-										e.stopPropagation();
-										removeList(list.id);
-									}}>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 24 24"
-										fill="currentColor"
-										className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
-										<path
-											fillRule="evenodd"
-											d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
-											clipRule="evenodd"
-										/>
-									</svg>
-								</button>
-							</div>
-						))}
-					</ul>
-				</div>
+					))}
+				</ul>
 			</div>
 		</div>
 	);
