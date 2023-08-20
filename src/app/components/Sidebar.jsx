@@ -70,6 +70,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 		<div className="flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64">
 			<h1 className="text-white text-3xl text-center mb-5 ">OctoNotes!</h1>
 			<hr />
+			<br />
 			{userInfo && isAnonymous && (
 				<svg
 					width="100px"
