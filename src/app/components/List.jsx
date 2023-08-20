@@ -87,7 +87,7 @@ export const List = ({ selectedListID }) => {
 					<button
 						onClick={addItem}
 						className="p-4 rounded-lg text-xl text-center mb-3 text-[#fdfdfd] bg-[#457b9d] w-full">
-						Add to List
+						<p>Add to List</p>
 					</button>
 					<ul className="list-none flex flex-wrap gap-3">
 						{items.map(([itemId, itemValue]) => (
