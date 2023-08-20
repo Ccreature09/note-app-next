@@ -5,7 +5,6 @@ import { Sidebar } from "./components/Sidebar";
 import { Auth } from "./firebase/Auth";
 import Image from "next/image";
 import octupus from "./images/octupus.png";
-import Head from "next/head";
 
 export default function Home() {
 	const [selectedListID, setSelectedListID] = useState("default");
@@ -14,10 +13,6 @@ export default function Home() {
 
 	return (
 		<>
-			<Head>
-				<link rel="icon" href="/favicon.ico" />
-				<link rel="manifest" href="/public/manifest.json" />
-			</Head>
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen">
 				<div>
 					<Sidebar setSelectedListID={setSelectedListID} uid={setGuestUid} />

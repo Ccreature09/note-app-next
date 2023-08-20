@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
 	title: "OctoNotes",
 	description: "Notes for your everyday needs!",
+	manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({
