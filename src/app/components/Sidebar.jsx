@@ -68,7 +68,8 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 	return (
 		<div className="flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64">
-			<h1 className="text-white text-3xl text-center mb-10 ">OctoNotes!</h1>
+			<h1 className="text-white text-3xl text-center mb-5 ">OctoNotes!</h1>
+			<hr />
 			{userInfo && isAnonymous && (
 				<svg
 					width="100px"
@@ -118,7 +119,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 					<div>
 						<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
 							<button
-								className="text-[#F1FAEE] font-semibold text-sm mb-2 cursor-pointer py-1 px-52 lg:px-24 md:px-24 border-white border-2 rounded-lg"
+								className="text-[#F1FAEE] font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-white border-2 rounded-lg"
 								onClick={toggleListCollapse}>
 								{isListCollapsed ? (
 									<svg
