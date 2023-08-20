@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Auth, GoogleAuthButton, GuestAuthButton } from "../firebase/Auth";
-
 import { CreateList } from "./CreateList";
 import { ref, remove, onValue, update, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
@@ -113,7 +112,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 			)}
 			{}
 
-			{userInfo && <CreateList />}
+			<CreateList></CreateList>
 
 			<div>
 				{userLists.length > 0 && (
