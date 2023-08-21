@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { List } from "./components/List";
 import { Sidebar } from "./components/Sidebar";
 import { Auth } from "./firebase/Auth";
@@ -9,7 +9,30 @@ import octupus from "./images/octupus.png";
 export default function Home() {
 	const [selectedListID, setSelectedListID] = useState("default");
 	const [guestUid, setGuestUid] = useState(null);
+	const [notificationPermission, setNotificationPermission] =
+		useState("default");
 	const userInfo = Auth();
+
+	useEffect(() => {
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker
+				.register("/sw.js")
+				.then((registration) => {
+					console.log(
+						"Service Worker registered with scope:",
+						registration.scope
+					);
+				})
+				.catch((error) => {
+					console.error("Service Worker registration failed:", error);
+				});
+		}
+		if ("Notification" in window) {
+			Notification.requestPermission().then((permission) => {
+				setNotificationPermission(permission);
+			});
+		}
+	}, []);
 
 	return (
 		<>

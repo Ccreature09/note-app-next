@@ -48,7 +48,7 @@ export const List = ({ selectedListID }) => {
 			name: inputValue,
 		};
 
-		if (reminderTime != "") {
+		if (reminderTime !== "") {
 			push(ListInDB, newReminder);
 		} else {
 			push(ListInDB, newNote);
