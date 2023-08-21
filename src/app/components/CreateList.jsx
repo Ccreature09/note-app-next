@@ -9,7 +9,28 @@ export const CreateList = () => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [listName, setListName] = useState("");
 	const [listType, setListType] = useState("individual");
+	const [listType1, setListType1] = useState("notes");
 	const [error, setError] = useState("");
+	const [reminders, setReminders] = useState([]);
+	const [reminderName, setReminderName] = useState("");
+	const [reminderTime, setReminderTime] = useState("");
+
+	const addReminder = () => {
+		if (reminderName.trim() === "" || !reminderTime) {
+			setError("Please enter a valid reminder name and time.");
+			return;
+		}
+
+		const newReminder = {
+			name: reminderName,
+			time: reminderTime,
+			notified: false,
+		};
+
+		setReminders([...reminders, newReminder]);
+		setReminderName("");
+		setReminderTime("");
+	};
 
 	const toggleOverlay = () => {
 		setShowOverlay(!showOverlay);
@@ -120,6 +141,7 @@ export const CreateList = () => {
 									<p className="text-center">Group</p>
 								</label>
 							</div>
+
 							<div className="flex mt-3">
 								<button
 									className="bg-blue-600 text-white p-2 mx-2 rounded w-1/2"
