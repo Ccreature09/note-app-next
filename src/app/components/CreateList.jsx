@@ -60,7 +60,7 @@ export const CreateList = () => {
 					<div className="  bg-white p-10 rounded-xl fixed lg:top-48 lg:left-1/3 sm:left-1/3  lg:w-2/5 lg:h-3/5 z-1">
 						<div className="popup">
 							<p className="text-center text-7xl mb-12 font-bold">
-								What is the list's name?
+								What is the list&apos;s name?
 							</p>
 							<input
 								type="text"
