@@ -7,8 +7,8 @@ import Image from "next/image";
 import octupus from "./images/octupus.png";
 
 export default function Home() {
-	const [selectedListID, setSelectedListID] = useState("default");
-	const [guestUid, setGuestUid] = useState(null);
+	const [selectedList, setSelectedListID] = useState({ listID: "", uid: "" });
+
 	const [notificationPermission, setNotificationPermission] =
 		useState("default");
 	const userInfo = Auth();
@@ -34,11 +34,15 @@ export default function Home() {
 		}
 	}, []);
 
+	useEffect(() => {
+		console.log(selectedList);
+	}, [selectedList]);
+
 	return (
 		<>
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen">
 				<div>
-					<Sidebar setSelectedListID={setSelectedListID} uid={setGuestUid} />
+					<Sidebar setSelectedListID={setSelectedListID} />
 				</div>
 
 				<div className="flex flex-col flex-grow max-w-xs h-auto mx-auto justify-center my-10">
@@ -52,7 +56,7 @@ export default function Home() {
 
 					<div className="flex justify-center md:items-center  w-full">
 						{userInfo && (
-							<List selectedListID={selectedListID} uID={userInfo.uid} />
+							<List listID={selectedList.listID} listUID={selectedList.uid} />
 						)}
 					</div>
 				</div>

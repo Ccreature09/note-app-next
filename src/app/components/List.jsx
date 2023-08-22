@@ -5,7 +5,9 @@ import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { Auth } from "../firebase/Auth";
 
-export const List = ({ selectedListID }) => {
+export const List = (listIID, listUIID) => {
+	const listID = JSON.stringify(listIID);
+	const listUID = JSON.stringify(listUIID);
 	const userInfo = Auth();
 	const isAnonymous = userInfo && userInfo.isAnonymous;
 	const uid = userInfo && userInfo.uid;
@@ -16,11 +18,13 @@ export const List = ({ selectedListID }) => {
 	const [reminderTime, setReminderTime] = useState("");
 
 	const addItem = () => {
+		console.log(listID + " " + listUID);
+
 		const ListInDB = ref(
 			database,
-			`${userInfo.isAnonymous ? "guests" : "users"}/${
-				userInfo.uid
-			}/lists/${selectedListID}/items`
+			`${
+				userInfo.isAnonymous ? "guests" : "users"
+			}/${listUID}/lists/${listID}/items`
 		);
 		if (inputValue.trim() === "") {
 			setError("Please enter a valid item.");
@@ -36,7 +40,6 @@ export const List = ({ selectedListID }) => {
 
 				{
 					month: "long",
-
 					hour: "numeric",
 					minute: "numeric",
 					hour12: true,
@@ -73,7 +76,7 @@ export const List = ({ selectedListID }) => {
 			database,
 			`${
 				isAnonymous ? "guests" : "users"
-			}/${uid}/lists/${selectedListID}/items/${itemId}`
+			}/${listUID}/lists/${listID}/items/${itemId}`
 		);
 		remove(exactLocationOfItemInDB);
 	};
@@ -81,7 +84,7 @@ export const List = ({ selectedListID }) => {
 	useEffect(() => {
 		const listRef = ref(
 			database,
-			`${isAnonymous ? "guests" : "users"}/${uid}/lists/${selectedListID}/items`
+			`${isAnonymous ? "guests" : "users"}/${listUID}/lists/${listID}/items`
 		);
 		onValue(listRef, (snapshot) => {
 			if (snapshot.exists()) {
@@ -92,13 +95,11 @@ export const List = ({ selectedListID }) => {
 				setItems([]);
 			}
 		});
-	}, [
-		`${isAnonymous ? "guests" : "users"}/${uid}/lists/${selectedListID}/items`,
-	]);
+	}, [`${isAnonymous ? "guests" : "users"}/${listUID}/lists/${listID}/items`]);
 
 	return (
 		<>
-			{selectedListID !== "default" && userInfo.uid && (
+			{listID !== "default" && userInfo && (
 				<div>
 					<div className="flex">
 						<input

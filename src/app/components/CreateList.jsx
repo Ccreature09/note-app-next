@@ -43,20 +43,6 @@ export const CreateList = () => {
 			setEnteredMember("");
 		}
 	};
-	const renderListDetails = () => {
-		return (
-			<div>
-				<h2>List Name: {listData.title}</h2>
-				<h3>List Type: {listData.type}</h3>
-				<h4>Members:</h4>
-				<ul>
-					{listData.members.map((member, index) => (
-						<li key={index}>{member}</li>
-					))}
-				</ul>
-			</div>
-		);
-	};
 
 	const handleCreateList = () => {
 		if (listName.trim() === "") {
