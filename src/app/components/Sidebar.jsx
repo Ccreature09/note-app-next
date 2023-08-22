@@ -12,11 +12,41 @@ export const Sidebar = ({ setSelectedListID }) => {
 	const name = userInfo && userInfo.displayName;
 	const email = userInfo && userInfo.email;
 	const [activeListItem, setActiveListItem] = useState("");
-	const [userLists, setUserLists] = useState([]);
+
 	const [isListCollapsed, setListCollapsed] = useState(false);
+	const [userLists, setUserLists] = useState([]);
+	const [userPartOfLists, setUserPartOfLists] = useState([]);
 
 	const toggleListCollapse = () => {
 		setListCollapsed((prevCollapsed) => !prevCollapsed);
+	};
+	const fetchOtherUsersLists = () => {
+		const otherUsersListsRef = ref(database, "users");
+		onValue(otherUsersListsRef, (snapshot) => {
+			if (snapshot.exists()) {
+				const users = snapshot.val();
+				const otherUsersLists = [];
+
+				Object.keys(users).forEach((uid) => {
+					if (uid !== userInfo.uid) {
+						const userLists = users[uid].lists || {};
+						Object.keys(userLists).forEach((listID) => {
+							const members = userLists[listID].members || [];
+							if (
+								members.includes(userInfo.email) ||
+								members.includes(userInfo.displayName)
+							) {
+								otherUsersLists.push(userLists[listID]);
+							}
+						});
+					}
+				});
+
+				setUserPartOfLists(otherUsersLists);
+			} else {
+				setUserPartOfLists([]);
+			}
+		});
 	};
 
 	useEffect(() => {
@@ -42,6 +72,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 					setUserLists([]);
 				}
 			});
+			fetchOtherUsersLists();
 		} else {
 			setUserLists([]);
 			setSelectedListID("default");
@@ -111,6 +142,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 			) : (
 				<GoogleAuthButton />
 			)}
+			{userPartOfLists}
 
 			<CreateList></CreateList>
 
@@ -157,6 +189,55 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 						<hr />
 						<br />
+					</div>
+				)}
+				{userPartOfLists.length > 0 && (
+					<div>
+						<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
+							Lists You're Part Of:
+						</p>
+						<hr />
+						<br />
+						<ul>
+							{userPartOfLists.map((list) => (
+								<div
+									className={`flex items-center justify-between p-4 ${
+										isListCollapsed ? "hidden" : ""
+									}`}
+									key={list.id}>
+									<li
+										className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
+											activeListItem === list.id
+												? "bg-[#457B9D]"
+												: "bg-[#1D3557] hover:bg-[#457B9D]"
+										}`}
+										onClick={() => {
+											setActiveListItem(list.id);
+											setSelectedListID(list.id);
+										}}>
+										{list.title}
+									</li>
+									<button
+										className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded"
+										onClick={(e) => {
+											e.stopPropagation();
+											removeList(list.id);
+										}}>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											fill="currentColor"
+											className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
+											<path
+												fillRule="evenodd"
+												d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
+												clipRule="evenodd"
+											/>
+										</svg>
+									</button>
+								</div>
+							))}
+						</ul>
 					</div>
 				)}
 

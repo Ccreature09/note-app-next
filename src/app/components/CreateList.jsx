@@ -9,11 +9,12 @@ export const CreateList = () => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [listName, setListName] = useState("");
 	const [listType, setListType] = useState("individual");
-	const [listType1, setListType1] = useState("notes");
+	const [listMembers, setListMembers] = useState([]);
 	const [error, setError] = useState("");
 	const [reminders, setReminders] = useState([]);
 	const [reminderName, setReminderName] = useState("");
 	const [reminderTime, setReminderTime] = useState("");
+	const [enteredMember, setEnteredMember] = useState("");
 
 	const addReminder = () => {
 		if (reminderName.trim() === "" || !reminderTime) {
@@ -36,6 +37,26 @@ export const CreateList = () => {
 		setShowOverlay(!showOverlay);
 		setError("");
 	};
+	const addMemberToList = () => {
+		if (!listMembers.includes(enteredMember)) {
+			setListMembers([...listMembers, enteredMember]);
+			setEnteredMember("");
+		}
+	};
+	const renderListDetails = () => {
+		return (
+			<div>
+				<h2>List Name: {listData.title}</h2>
+				<h3>List Type: {listData.type}</h3>
+				<h4>Members:</h4>
+				<ul>
+					{listData.members.map((member, index) => (
+						<li key={index}>{member}</li>
+					))}
+				</ul>
+			</div>
+		);
+	};
 
 	const handleCreateList = () => {
 		if (listName.trim() === "") {
@@ -47,6 +68,7 @@ export const CreateList = () => {
 			id: "",
 			title: listName,
 			type: listType,
+			members: listMembers,
 		};
 
 		let listsRef;
@@ -78,7 +100,10 @@ export const CreateList = () => {
 
 			{showOverlay && userInfo && (
 				<div className=" fixed top-0 left-0 w-full h-full bg-[rgba(60,84,150,0.48)]">
-					<div className="  bg-white p-10 rounded-xl fixed lg:top-48 lg:left-1/3 sm:left-1/3  lg:w-2/5 lg:h-3/5 z-1">
+					<div
+						className={` lg:w-2/5  z-1 bg-white p-10 rounded-xl fixed lg:top-48 lg:left-1/3 sm:left-1/3 ${
+							listType === "group" ? "lg:h-3/4" : "lg:h-3/5"
+						}  `}>
 						<div className="popup">
 							<p className="text-center text-7xl mb-12 font-bold">
 								What is the list&apos;s name?
@@ -141,6 +166,30 @@ export const CreateList = () => {
 									<p className="text-center">Group</p>
 								</label>
 							</div>
+							{listType === "group" && (
+								<div className="mt-4">
+									<h3 className="text-lg font-semibold mb-2">
+										List Members (seperate with ","):
+									</h3>
+									<ul>
+										{listMembers.map((member, index) => (
+											<li key={index}>{member}</li>
+										))}
+									</ul>
+									<input
+										type="text"
+										placeholder="Enter user email/username"
+										value={listMembers.join(",")}
+										onChange={(e) => setListMembers(e.target.value.split(","))}
+										className="text-center w-full text-5xl mb-10"
+									/>
+									<button
+										className="bg-blue-600 text-white p-2 mx-2 rounded w-full"
+										onClick={addMemberToList}>
+										Add User
+									</button>
+								</div>
+							)}
 
 							<div className="flex mt-3">
 								<button
