@@ -142,146 +142,134 @@ export const Sidebar = ({ setSelectedListID }) => {
 			) : (
 				<GoogleAuthButton />
 			)}
-			{userPartOfLists}
 
 			<CreateList></CreateList>
 
-			<div>
-				{userLists.length > 0 && (
-					<div>
-						<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
-							<button
-								className="text-[#F1FAEE] font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-white border-2 rounded-lg"
-								onClick={toggleListCollapse}>
-								{isListCollapsed ? (
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-										strokeWidth={1.5}
-										stroke="currentColor"
-										className="w-6 h-6">
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
-										/>
-									</svg>
-								) : (
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-										strokeWidth="1.5"
-										stroke="currentColor"
-										className="w-6 h-6">
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5"
-										/>
-									</svg>
-								)}
-							</button>{" "}
-							<br />
-							Your Lists:
-						</p>
-
-						<hr />
-						<br />
-					</div>
-				)}
-				{userPartOfLists.length > 0 && (
-					<div>
-						<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
-							Lists You're Part Of:
-						</p>
-						<hr />
-						<br />
-						<ul>
-							{userPartOfLists.map((list) => (
-								<div
-									className={`flex items-center justify-between p-4 ${
-										isListCollapsed ? "hidden" : ""
-									}`}
-									key={list.id}>
-									<li
-										className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
-											activeListItem === list.id
-												? "bg-[#457B9D]"
-												: "bg-[#1D3557] hover:bg-[#457B9D]"
-										}`}
-										onClick={() => {
-											setActiveListItem(list.id);
-											setSelectedListID(list.id);
-										}}>
-										{list.title}
-									</li>
+			{userInfo && (
+				<div>
+					{userLists.length ||
+						(userPartOfLists.length > 0 && (
+							<div>
+								<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
 									<button
-										className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded"
-										onClick={(e) => {
-											e.stopPropagation();
-											removeList(list.id);
-										}}>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-											fill="currentColor"
-											className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
-											<path
-												fillRule="evenodd"
-												d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
-												clipRule="evenodd"
-											/>
-										</svg>
-									</button>
-								</div>
-							))}
-						</ul>
-					</div>
-				)}
+										className="text-[#F1FAEE] font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-white border-2 rounded-lg"
+										onClick={toggleListCollapse}>
+										{isListCollapsed ? (
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												strokeWidth={1.5}
+												stroke="currentColor"
+												className="w-6 h-6">
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+												/>
+											</svg>
+										) : (
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												strokeWidth="1.5"
+												stroke="currentColor"
+												className="w-6 h-6">
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5"
+												/>
+											</svg>
+										)}
+									</button>{" "}
+									<br />
+									Lists
+								</p>
 
-				<ul>
-					{userLists.map((list) => (
-						<div
-							className={`flex items-center justify-between p-4 ${
-								isListCollapsed ? "hidden" : ""
-							}`}
-							key={list.id}>
-							<li
-								className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
-									activeListItem === list.id
-										? "bg-[#457B9D]"
-										: "bg-[#1D3557] hover:bg-[#457B9D]"
-								}`}
-								onClick={() => {
-									setActiveListItem(list.id);
-									setSelectedListID(list.id);
-								}}>
-								{list.title}
-							</li>
-							<button
-								className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded"
-								onClick={(e) => {
-									e.stopPropagation();
-									removeList(list.id);
-								}}>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 24 24"
-									fill="currentColor"
-									className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
-									<path
-										fillRule="evenodd"
-										d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
-										clipRule="evenodd"
-									/>
-								</svg>
-							</button>
+								<hr />
+								<br />
+							</div>
+						))}
+					{userLists.length > 0 && (
+						<div>
+							<ul>
+								{userLists.map((list) => (
+									<div
+										className={`flex items-center justify-between p-4 ${
+											isListCollapsed ? "hidden" : ""
+										}`}
+										key={list.id}>
+										<li
+											className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
+												activeListItem === list.id
+													? "bg-[#457B9D]"
+													: "bg-[#1D3557] hover:bg-[#457B9D]"
+											}`}
+											onClick={() => {
+												setActiveListItem(list.id);
+												setSelectedListID(list.id);
+											}}>
+											{list.title}
+										</li>
+										<button
+											className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded"
+											onClick={(e) => {
+												e.stopPropagation();
+												removeList(list.id);
+											}}>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 24 24"
+												fill="currentColor"
+												className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
+												<path
+													fillRule="evenodd"
+													d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
+													clipRule="evenodd"
+												/>
+											</svg>
+										</button>
+									</div>
+								))}
+							</ul>{" "}
 						</div>
-					))}
-				</ul>
-			</div>
+					)}
+
+					{userPartOfLists.length > 0 && (
+						<div>
+							<p className="text-[#F1FAEE] font-semibold mb-2 text-center">
+								Lists You're Part Of:
+							</p>
+							<hr />
+							<br />
+							<ul>
+								{userPartOfLists.map((list) => (
+									<div
+										className={`flex items-center justify-between p-4 ${
+											isListCollapsed ? "hidden" : ""
+										}`}
+										key={list.id}>
+										<li
+											className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
+												activeListItem === list.id
+													? "bg-[#457B9D]"
+													: "bg-[#1D3557] hover:bg-[#457B9D]"
+											}`}
+											onClick={() => {
+												setActiveListItem(list.id);
+												setSelectedListID(list.id);
+											}}>
+											{list.title}
+										</li>
+									</div>
+								))}
+							</ul>
+						</div>
+					)}
+				</div>
+			)}
 		</div>
 	);
 };
