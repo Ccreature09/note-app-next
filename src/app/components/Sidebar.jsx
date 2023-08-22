@@ -260,7 +260,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 						{userPartOfLists.length > 0 && (
 							<div className={`${isListCollapsed ? "hidden" : ""}`}>
 								<p className={`text-[#F1FAEE] font-semibold mb-2 text-center `}>
-									Lists You're Part Of:
+									Lists You&apos;re Part Of:
 								</p>
 								<hr />
 								<br />
