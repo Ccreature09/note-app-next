@@ -155,7 +155,7 @@ export const CreateList = () => {
 							{listType === "group" && (
 								<div className="mt-4">
 									<h3 className="text-lg font-semibold mb-2">
-										List Members (seperate with ","):
+										List Members (seperate with comma):
 									</h3>
 									<ul>
 										{listMembers.map((member, index) => (
