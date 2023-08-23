@@ -85,12 +85,9 @@ export const CreateList = () => {
 			)}
 
 			{showOverlay && userInfo && (
-				<div className=" fixed top-0 left-0 w-full h-full bg-[rgba(60,84,150,0.48)]">
-					<div
-						className={` lg:w-2/5  z-1 bg-white p-10 rounded-xl fixed lg:top-48 lg:left-1/3 sm:left-1/3 ${
-							listType === "group" ? "lg:h-3/4" : "lg:h-3/5"
-						}  `}>
-						<div className="popup">
+				<div className="fixed top-0 left-0 w-full h-full bg-[rgba(60,84,150,0.48)] flex justify-center items-center">
+					<div className={"z-1 bg-white rounded-xl p-10 w-full max-w-lg"}>
+						<div className="popup ">
 							<p className="text-center text-7xl mb-12 font-bold">
 								What is the list&apos;s name?
 							</p>
@@ -170,7 +167,7 @@ export const CreateList = () => {
 										className="text-center w-full text-5xl mb-10"
 									/>
 									<button
-										className="bg-blue-600 text-white p-2 mx-2 rounded w-full"
+										className="bg-blue-600 text-white p-2  rounded w-full"
 										onClick={addMemberToList}>
 										Add User
 									</button>
