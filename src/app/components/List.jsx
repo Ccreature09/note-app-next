@@ -35,7 +35,7 @@ export const List = ({ listInfo }) => {
 		const newReminder = {
 			name: inputValue,
 			time: reminderDate.getTime(),
-			formattedTime: ` ${reminderDate.getDate()} of ${reminderDate.toLocaleString(
+			formattedTime: ` ${reminderDate.getDate()} ${reminderDate.toLocaleString(
 				"default",
 
 				{
