@@ -5,9 +5,9 @@ import { onValue, ref, push, remove } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { Auth } from "../firebase/Auth";
 
-export const List = (listIID, listUIID) => {
-	const listID = JSON.stringify(listIID);
-	const listUID = JSON.stringify(listUIID);
+export const List = ({ listInfo }) => {
+	const listID = JSON.stringify(listInfo.listID);
+	const listUID = JSON.stringify(listInfo.uid);
 	const userInfo = Auth();
 	const isAnonymous = userInfo && userInfo.isAnonymous;
 	const uid = userInfo && userInfo.uid;
@@ -18,7 +18,7 @@ export const List = (listIID, listUIID) => {
 	const [reminderTime, setReminderTime] = useState("");
 
 	const addItem = () => {
-		console.log(listID + " " + listUID);
+		console.log(listID + "" + listUID);
 
 		const ListInDB = ref(
 			database,
@@ -99,7 +99,7 @@ export const List = (listIID, listUIID) => {
 
 	return (
 		<>
-			{listID !== "default" && userInfo && (
+			{listID.length > 2 && listUID.length > 2 && (
 				<div>
 					<div className="flex">
 						<input

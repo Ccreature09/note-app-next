@@ -68,6 +68,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 	useEffect(() => {
 		if (userInfo) {
+			setSelectedListID({ listID: "", uid: "" });
 			if (!userInfo.isAnonymous) {
 				const uid = ref(
 					database,
@@ -83,6 +84,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 				database,
 				`${userInfo.isAnonymous ? "guests" : "users"}/${userInfo.uid}/lists`
 			);
+
 			onValue(userListsRef, (snapshot) => {
 				if (snapshot.exists()) {
 					const lists = snapshot.val();
@@ -90,17 +92,18 @@ export const Sidebar = ({ setSelectedListID }) => {
 					setUserLists(listsArray);
 				} else {
 					setUserLists([]);
+					setSelectedListID({ listID: "", uid: "" });
 				}
 			});
 			fetchOtherUsersLists();
 		} else {
 			setUserLists([]);
-			setSelectedListID({ listID: "default", uid: "" });
+			setSelectedListID({ listID: "", uid: "" });
 		}
 	}, [userInfo, setSelectedListID]);
 
 	const removeList = (listId) => {
-		setSelectedListID({ listID: "default", uid: "" });
+		setSelectedListID({ listID: "", uid: "" });
 
 		setUserLists((prevLists) => prevLists.filter((list) => list.id !== listId));
 
@@ -120,6 +123,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 	return (
 		<div className="flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64">
 			<h1 className="text-white text-3xl text-center mb-5 ">OctoNotes!</h1>
+
 			<hr />
 			<br />
 			{userInfo && isAnonymous && (

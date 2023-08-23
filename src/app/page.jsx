@@ -34,10 +34,6 @@ export default function Home() {
 		}
 	}, []);
 
-	useEffect(() => {
-		console.log(selectedList);
-	}, [selectedList]);
-
 	return (
 		<>
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen">
@@ -55,9 +51,7 @@ export default function Home() {
 					/>
 
 					<div className="flex justify-center md:items-center  w-full">
-						{userInfo && (
-							<List listID={selectedList.listID} listUID={selectedList.uid} />
-						)}
+						{userInfo && <List listInfo={selectedList} />}
 					</div>
 				</div>
 			</div>
