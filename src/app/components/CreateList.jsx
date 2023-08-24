@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ref, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { Auth } from "../firebase/Auth";
+import { list } from "postcss";
 
 export const CreateList = () => {
 	const userInfo = Auth();
@@ -12,17 +13,9 @@ export const CreateList = () => {
 	const [listMembers, setListMembers] = useState([]);
 	const [error, setError] = useState("");
 
-	const [enteredMember, setEnteredMember] = useState("");
-
 	const toggleOverlay = () => {
 		setShowOverlay(!showOverlay);
 		setError("");
-	};
-	const addMemberToList = () => {
-		if (!listMembers.includes(enteredMember)) {
-			setListMembers([...listMembers, enteredMember]);
-			setEnteredMember("");
-		}
 	};
 
 	const handleCreateList = () => {
@@ -137,11 +130,18 @@ export const CreateList = () => {
 									<h3 className="text-lg font-semibold mb-2 text-center">
 										List Members (seperate with comma):
 									</h3>
-									<ul>
-										{listMembers.map((member, index) => (
-											<li key={index}>{member}</li>
-										))}
-									</ul>
+									{listMembers.length > 1 && (
+										<ul className="list-none flex flex-wrap gap-3 mb-3">
+											{listMembers.map((member, index) => (
+												<li
+													className="hover:bg-[#E63946] transition-all duration-200 cursor-pointer text-xl bg-[#F1FAEE] p-4 rounded-lg flex-grow text-center"
+													key={index}>
+													{member}
+												</li>
+											))}
+										</ul>
+									)}
+
 									<input
 										type="text"
 										placeholder="email / username"
@@ -149,11 +149,6 @@ export const CreateList = () => {
 										onChange={(e) => setListMembers(e.target.value.split(","))}
 										className="text-center w-full text-5xl mb-5"
 									/>
-									<button
-										className="bg-blue-600 text-white p-2  rounded w-full"
-										onClick={addMemberToList}>
-										Add User
-									</button>
 								</div>
 							)}
 

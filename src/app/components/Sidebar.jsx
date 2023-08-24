@@ -1,15 +1,8 @@
 import { useState, useEffect } from "react";
 import { Auth, GoogleAuthButton, GuestAuthButton } from "../firebase/Auth";
 import { CreateList } from "./CreateList";
-import {
-	ref,
-	remove,
-	onValue,
-	update,
-	onChildRemoved,
-} from "firebase/database";
+import { ref, remove, onValue, update } from "firebase/database";
 import { database } from "../firebase/firebase";
-import { Image } from "next/image";
 
 export const Sidebar = ({ setSelectedListID }) => {
 	const userInfo = Auth();
@@ -23,21 +16,6 @@ export const Sidebar = ({ setSelectedListID }) => {
 	const [userLists, setUserLists] = useState([]);
 	const [userPartOfLists, setUserPartOfLists] = useState([]);
 	const [sharedListOwner, setSharedListOwner] = useState();
-
-	const renderListDetails = () => {
-		return (
-			<div>
-				<h2>List Name: {listData.title}</h2>
-				<h3>List Type: {listData.type}</h3>
-				<h4>Members:</h4>
-				<ul>
-					{listData.members.map((member, index) => (
-						<li key={index}>{member}</li>
-					))}
-				</ul>
-			</div>
-		);
-	};
 
 	const toggleListCollapse = () => {
 		setListCollapsed((prevCollapsed) => !prevCollapsed);

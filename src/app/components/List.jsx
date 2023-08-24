@@ -10,7 +10,6 @@ export const List = ({ listInfo }) => {
 	const listUID = JSON.stringify(listInfo.uid).replace(/['"]+/g, "");
 	const userInfo = Auth();
 	const isAnonymous = userInfo && userInfo.isAnonymous;
-	const uid = userInfo && userInfo.uid;
 
 	const [inputValue, setInputValue] = useState("");
 	const [error, setError] = useState("");
