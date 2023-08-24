@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ref, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { Auth } from "../firebase/Auth";
-import { list } from "postcss";
 
 export const CreateList = () => {
 	const userInfo = Auth();
