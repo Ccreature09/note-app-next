@@ -118,7 +118,7 @@ export const List = ({ listInfo }) => {
 						value={reminderTime}
 						onChange={(e) => setReminderTime(e.target.value)}
 						size="100"
-						className=" text-3xl text-center   rounded mb-3 ml-2"
+						className=" text-lg text-center   rounded mb-4 w-full"
 					/>
 
 					{error && <p className="text-red-500">{error}</p>}
