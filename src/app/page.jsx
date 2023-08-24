@@ -38,10 +38,7 @@ export default function Home() {
 		<>
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen">
 				<div>
-					<Sidebar
-						setSelectedListID={setSelectedListID}
-						selectedListID={selectedListID}
-					/>
+					<Sidebar setSelectedListID={setSelectedListID} />
 				</div>
 
 				<div className="flex flex-col flex-grow max-w-xs h-auto mx-auto justify-center my-10">

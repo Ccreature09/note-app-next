@@ -11,7 +11,7 @@ import {
 import { database } from "../firebase/firebase";
 import { Image } from "next/image";
 
-export const Sidebar = ({ setSelectedListID, selectedListID }) => {
+export const Sidebar = ({ setSelectedListID }) => {
 	const userInfo = Auth();
 	const isAnonymous = userInfo && userInfo.isAnonymous;
 	const img = userInfo && userInfo.photoURL;
@@ -23,7 +23,6 @@ export const Sidebar = ({ setSelectedListID, selectedListID }) => {
 	const [userLists, setUserLists] = useState([]);
 	const [userPartOfLists, setUserPartOfLists] = useState([]);
 	const [sharedListOwner, setSharedListOwner] = useState();
-	const [groupListsPath, setGroupListsPath] = useState([]);
 
 	const renderListDetails = () => {
 		return (
@@ -91,9 +90,6 @@ export const Sidebar = ({ setSelectedListID, selectedListID }) => {
 								) {
 									otherUsersLists.push(userLists[listID]);
 									setSharedListOwner(uid);
-									if (!groupListsPath.includes(`users/${uid}/lists`)) {
-										setGroupListsPath([...myArray, `users/${uid}/lists`]);
-									}
 								}
 							});
 						}
@@ -113,15 +109,13 @@ export const Sidebar = ({ setSelectedListID, selectedListID }) => {
 	useEffect(() => {
 		const unsubscribes = [];
 
-		groupListsPath.forEach((listPath) => {
-			const listRef = ref(database, listPath);
+		userPartOfLists.forEach((list) => {
+			const listRef = ref(
+				database,
+				`users/${sharedListOwner}/lists/${list.id}`
+			);
 			const unsubscribe = onValue(listRef, (snapshot) => {
-				setListDeletionStatus((prevStatus) => ({
-					...prevStatus,
-					[listPath]: !snapshot.exists(),
-				}));
-
-				if (!snapshot.exists() && selectedListID.listID === listPath) {
+				if (!snapshot.exists()) {
 					setSelectedListID({ listID: "", uid: "" });
 				}
 			});
@@ -132,7 +126,7 @@ export const Sidebar = ({ setSelectedListID, selectedListID }) => {
 		return () => {
 			unsubscribes.forEach((unsubscribe) => unsubscribe());
 		};
-	}, [groupListsPath, selectedListID]);
+	}, [userPartOfLists, sharedListOwner]);
 
 	const removeList = (listId) => {
 		setSelectedListID({ listID: "", uid: "" });
