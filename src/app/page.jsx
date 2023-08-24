@@ -5,6 +5,9 @@ import { Sidebar } from "./components/Sidebar";
 import { Auth } from "./firebase/Auth";
 import Image from "next/image";
 import octupus from "./images/octupus.png";
+import { Raleway } from "next/font/google";
+
+const raleway = Raleway({ subsets: ["latin"], weight: ["100"] });
 
 export default function Home() {
 	const [selectedListID, setSelectedListID] = useState({ listID: "", uid: "" });
@@ -36,6 +39,11 @@ export default function Home() {
 
 	return (
 		<>
+			<style jsx global>{`
+				html {
+					font-family: ${raleway.style.fontFamily};
+				}
+			`}</style>
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen">
 				<div>
 					<Sidebar setSelectedListID={setSelectedListID} />

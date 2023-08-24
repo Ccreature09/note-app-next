@@ -31,7 +31,7 @@ export const GoogleAuthButton = () => {
 
 	return (
 		<button
-			className="mb-4 border-none bg-green-500 p-2 rounded font-medium text-[#F1FAEE]"
+			className="mb-4 border-none bg-green-500 p-2 text-2xl rounded  text-[#F1FAEE]"
 			onClick={handleAuthClick}>
 			{userInfo ? "Sign Out" : "Sign In with Google"}
 		</button>
@@ -63,7 +63,7 @@ export const GuestAuthButton = () => {
 
 	return (
 		<button
-			className="mb-4 border-none bg-gray-500 p-2 rounded font-medium text-[#F1FAEE]"
+			className="mb-4 border-none bg-gray-500 p-2 rounded text-2xl text-[#F1FAEE]"
 			onClick={handleAuthClick}>
 			{guestInfo ? "Sign Out" : "Sign In as Guest"}
 		</button>

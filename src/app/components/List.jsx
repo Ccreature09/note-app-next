@@ -104,7 +104,7 @@ export const List = ({ listInfo }) => {
 				<div>
 					<div className="flex">
 						<input
-							className="block p-4 rounded-lg text-xl text-center mb-3 text-[#432000] w-full bg-[#F1FAEE]"
+							className="font-sans block p-4 rounded-lg text-xl text-center mb-3 text-[#432000] w-full bg-[#F1FAEE]"
 							type="text"
 							placeholder="Bread"
 							value={inputValue}

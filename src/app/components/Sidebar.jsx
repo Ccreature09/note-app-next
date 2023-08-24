@@ -3,6 +3,19 @@ import { Auth, GoogleAuthButton, GuestAuthButton } from "../firebase/Auth";
 import { CreateList } from "./CreateList";
 import { ref, remove, onValue, update } from "firebase/database";
 import { database } from "../firebase/firebase";
+import { Poiret_One } from "next/font/google";
+import { Monoton } from "next/font/google";
+
+const poiret_One = Poiret_One({
+	subsets: ["latin"],
+	weight: "400",
+	variable: "--font-poiret",
+});
+const monoton = Monoton({
+	subsets: ["latin"],
+	weight: "400",
+	variable: "--font-monoton",
+});
 
 export const Sidebar = ({ setSelectedListID }) => {
 	const userInfo = Auth();
@@ -125,8 +138,12 @@ export const Sidebar = ({ setSelectedListID }) => {
 	};
 
 	return (
-		<div className="flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64">
-			<h1 className="text-white text-3xl text-center mb-5 ">OctoNotes!</h1>
+		<div
+			className={`flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64 ${poiret_One.variable} font-sans`}>
+			<h1
+				className={` ${monoton.variable} font-mono text-white text-3xl font-medium text-center mb-5 `}>
+				Octonotes
+			</h1>
 
 			<hr />
 			<br />
@@ -154,8 +171,10 @@ export const Sidebar = ({ setSelectedListID }) => {
 				<div className="flex items-center justify-center space-x-4 mb-6">
 					<img src={img} alt="" className="w-16 h-16 rounded-full" />
 					<div className="flex flex-col ">
-						<p className="text-[#F1FAEE] font-semibold text-lg">{name}</p>
-						<p className="text-[#F1FAEE] text-sm truncate md:w-auto">{email}</p>
+						<p className="text-[#F1FAEE] font-black text-2xl">{name}</p>
+						<p className="text-[#F1FAEE] text-base truncate md:w-auto">
+							{email}
+						</p>
 					</div>
 				</div>
 			)}
@@ -216,7 +235,10 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 						{userLists.length > 0 && (
 							<div className={`${isListCollapsed ? "hidden" : ""}`}>
-								<p className={"text-[#F1FAEE] font-semibold mb-2 text-center"}>
+								<p
+									className={
+										"text-[#F1FAEE] font-bold text-2xl mb-2 text-center"
+									}>
 									My Lists:
 								</p>
 								<hr />
@@ -229,7 +251,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 											}`}
 											key={list.id}>
 											<li
-												className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center  text-[#F1FAEE] max-w-2xl overflow-auto ${
+												className={`transition-all duration-200 cursor-pointer text-2xl font-black p-3 mb-3 rounded-lg flex-grow text-center  text-[#F1FAEE] max-w-2xl overflow-auto ${
 													activeListItem === list.id
 														? "bg-[#457B9D]"
 														: "bg-[rgba(0,0,0,0.15)] hover:bg-[#457B9D]"
@@ -269,8 +291,9 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 						{userPartOfLists.length > 0 && (
 							<div className={`${isListCollapsed ? "hidden" : ""}`}>
-								<p className={`text-[#F1FAEE] font-semibold mb-2 text-center `}>
-									Lists You&apos;re Part Of:
+								<p
+									className={`text-[#F1FAEE] font-bold text-2xl mb-2 text-center `}>
+									Shared Lists:
 								</p>
 								<hr />
 								<br />
@@ -282,7 +305,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 											}`}
 											key={list.id}>
 											<li
-												className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
+												className={`transition-all duration-200 cursor-pointer text-2xl font-black p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
 													activeListItem === list.id
 														? "bg-[#457B9D]"
 														: "bg-[#1D3557] hover:bg-[#457B9D]"
