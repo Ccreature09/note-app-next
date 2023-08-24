@@ -41,6 +41,8 @@ export const CreateList = () => {
 
 		set(listRef, newList);
 
+		setListName("");
+		setListType("individual");
 		setListMembers([]);
 		toggleOverlay();
 	};
