@@ -112,13 +112,14 @@ export const List = ({ listInfo }) => {
 							onFocus={handleInputFocus}
 							maxLength={30}
 						/>
-						<input
-							type="datetime-local"
-							value={reminderTime}
-							onChange={(e) => setReminderTime(e.target.value)}
-							className="w-12 text-5xl  h-auto rounded-xl mb-3 ml-2"
-						/>
 					</div>
+					<input
+						type="datetime-local"
+						value={reminderTime}
+						onChange={(e) => setReminderTime(e.target.value)}
+						size="100"
+						className=" text-3xl text-center   rounded mb-3 ml-2"
+					/>
 
 					{error && <p className="text-red-500">{error}</p>}
 					<button
