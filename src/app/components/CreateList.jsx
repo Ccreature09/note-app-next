@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ref, push, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { Auth } from "../firebase/Auth";
@@ -11,27 +11,8 @@ export const CreateList = () => {
 	const [listType, setListType] = useState("individual");
 	const [listMembers, setListMembers] = useState([]);
 	const [error, setError] = useState("");
-	const [reminders, setReminders] = useState([]);
-	const [reminderName, setReminderName] = useState("");
-	const [reminderTime, setReminderTime] = useState("");
+
 	const [enteredMember, setEnteredMember] = useState("");
-
-	const addReminder = () => {
-		if (reminderName.trim() === "" || !reminderTime) {
-			setError("Please enter a valid reminder name and time.");
-			return;
-		}
-
-		const newReminder = {
-			name: reminderName,
-			time: reminderTime,
-			notified: false,
-		};
-
-		setReminders([...reminders, newReminder]);
-		setReminderName("");
-		setReminderTime("");
-	};
 
 	const toggleOverlay = () => {
 		setShowOverlay(!showOverlay);
@@ -57,14 +38,10 @@ export const CreateList = () => {
 			members: listMembers,
 		};
 
-		let listsRef;
-
-		if (userInfo) {
-			listsRef = ref(
-				database,
-				`${userInfo.isAnonymous ? "guests" : "users"}/${userInfo.uid}/lists`
-			);
-		}
+		const listsRef = ref(
+			database,
+			`${userInfo.isAnonymous ? "guests" : "users"}/${userInfo.uid}/lists`
+		);
 
 		const listRef = push(listsRef);
 		newList.id = listRef.key;

@@ -6,8 +6,8 @@ import { database } from "../firebase/firebase";
 import { Auth } from "../firebase/Auth";
 
 export const List = ({ listInfo }) => {
-	const listID = JSON.stringify(listInfo.listID);
-	const listUID = JSON.stringify(listInfo.uid);
+	const listID = JSON.stringify(listInfo.listID).replace(/['"]+/g, "");
+	const listUID = JSON.stringify(listInfo.uid).replace(/['"]+/g, "");
 	const userInfo = Auth();
 	const isAnonymous = userInfo && userInfo.isAnonymous;
 	const uid = userInfo && userInfo.uid;
@@ -60,6 +60,7 @@ export const List = ({ listInfo }) => {
 
 		setInputValue("");
 		setReminderTime("");
+		setReminder(false);
 	};
 
 	const handleKeyPress = (e) => {
