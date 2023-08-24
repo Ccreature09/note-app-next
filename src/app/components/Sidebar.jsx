@@ -172,41 +172,43 @@ export const Sidebar = ({ setSelectedListID }) => {
 			<div>
 				{userInfo && (
 					<div>
-						<div>
-							<button
-								className="text-[#F1FAEE] font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-white border-2 rounded-lg"
-								onClick={toggleListCollapse}>
-								{isListCollapsed ? (
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-										strokeWidth={1.5}
-										stroke="currentColor"
-										className="w-6 h-6">
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
-										/>
-									</svg>
-								) : (
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-										strokeWidth="1.5"
-										stroke="currentColor"
-										className="w-6 h-6">
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5"
-										/>
-									</svg>
-								)}
-							</button>
-						</div>
+						{userLists.length > 0 && (
+							<div className="flex">
+								<button
+									className="text-[#F1FAEE] m-auto font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-white border-2 rounded-lg"
+									onClick={toggleListCollapse}>
+									{isListCollapsed ? (
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth={1.5}
+											stroke="currentColor"
+											className="w-6 h-6">
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+											/>
+										</svg>
+									) : (
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth="1.5"
+											stroke="currentColor"
+											className="w-6 h-6">
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5"
+											/>
+										</svg>
+									)}
+								</button>
+							</div>
+						)}
 
 						{userLists.length > 0 && (
 							<div className={`${isListCollapsed ? "hidden" : ""}`}>
@@ -223,10 +225,10 @@ export const Sidebar = ({ setSelectedListID }) => {
 											}`}
 											key={list.id}>
 											<li
-												className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
+												className={`transition-all duration-200 cursor-pointer text-xl p-3 mb-3 rounded-lg flex-grow text-center  text-[#F1FAEE] max-w-2xl overflow-auto ${
 													activeListItem === list.id
 														? "bg-[#457B9D]"
-														: "bg-[#1D3557] hover:bg-[#457B9D]"
+														: "bg-[rgba(0,0,0,0.15)] hover:bg-[#457B9D]"
 												}`}
 												onClick={() => {
 													setActiveListItem(list.id);

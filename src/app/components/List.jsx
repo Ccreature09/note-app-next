@@ -116,7 +116,7 @@ export const List = ({ listInfo }) => {
 							type="datetime-local"
 							value={reminderTime}
 							onChange={(e) => setReminderTime(e.target.value)}
-							className="text-center w-12  text-5xl h-12"
+							className="w-12 text-5xl  h-auto rounded-xl mb-3 ml-2"
 						/>
 					</div>
 
