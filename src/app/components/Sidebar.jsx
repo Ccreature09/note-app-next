@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
 import { Auth, GoogleAuthButton, GuestAuthButton } from "../firebase/Auth";
 import { CreateList } from "./CreateList";
-import { ref, remove, onValue, update, push, set } from "firebase/database";
+import {
+	ref,
+	remove,
+	onValue,
+	update,
+	onChildRemoved,
+} from "firebase/database";
 import { database } from "../firebase/firebase";
 import { Image } from "next/image";
 
-export const Sidebar = ({ setSelectedListID }) => {
+export const Sidebar = ({ setSelectedListID, selectedListID }) => {
 	const userInfo = Auth();
 	const isAnonymous = userInfo && userInfo.isAnonymous;
 	const img = userInfo && userInfo.photoURL;
@@ -17,6 +23,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 	const [userLists, setUserLists] = useState([]);
 	const [userPartOfLists, setUserPartOfLists] = useState([]);
 	const [sharedListOwner, setSharedListOwner] = useState();
+	const [groupListsPath, setGroupListsPath] = useState([]);
 
 	const renderListDetails = () => {
 		return (
@@ -35,35 +42,6 @@ export const Sidebar = ({ setSelectedListID }) => {
 
 	const toggleListCollapse = () => {
 		setListCollapsed((prevCollapsed) => !prevCollapsed);
-	};
-	const fetchOtherUsersLists = () => {
-		const otherUsersListsRef = ref(database, "users");
-		onValue(otherUsersListsRef, (snapshot) => {
-			if (snapshot.exists()) {
-				const users = snapshot.val();
-				const otherUsersLists = [];
-
-				Object.keys(users).forEach((uid) => {
-					if (uid !== userInfo.uid) {
-						const userLists = users[uid].lists || {};
-						Object.keys(userLists).forEach((listID) => {
-							const members = userLists[listID].members || [];
-							if (
-								members.includes(userInfo.email) ||
-								members.includes(userInfo.displayName)
-							) {
-								otherUsersLists.push(userLists[listID]);
-								setSharedListOwner(uid);
-							}
-						});
-					}
-				});
-
-				setUserPartOfLists(otherUsersLists);
-			} else {
-				setUserPartOfLists([]);
-			}
-		});
 	};
 
 	useEffect(() => {
@@ -84,6 +62,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 				database,
 				`${userInfo.isAnonymous ? "guests" : "users"}/${userInfo.uid}/lists`
 			);
+			const otherUsersListsRef = ref(database, "users");
 
 			onValue(userListsRef, (snapshot) => {
 				if (snapshot.exists()) {
@@ -95,12 +74,65 @@ export const Sidebar = ({ setSelectedListID }) => {
 					setSelectedListID({ listID: "", uid: "" });
 				}
 			});
-			fetchOtherUsersLists();
+
+			onValue(otherUsersListsRef, (snapshot) => {
+				if (snapshot.exists()) {
+					const users = snapshot.val();
+					const otherUsersLists = [];
+
+					Object.keys(users).forEach((uid) => {
+						if (uid !== userInfo.uid) {
+							const userLists = users[uid].lists || {};
+							Object.keys(userLists).forEach((listID) => {
+								const members = userLists[listID].members || [];
+								if (
+									members.includes(userInfo.email) ||
+									members.includes(userInfo.displayName)
+								) {
+									otherUsersLists.push(userLists[listID]);
+									setSharedListOwner(uid);
+									if (!groupListsPath.includes(`users/${uid}/lists`)) {
+										setGroupListsPath([...myArray, `users/${uid}/lists`]);
+									}
+								}
+							});
+						}
+					});
+
+					setUserPartOfLists(otherUsersLists);
+				} else {
+					setUserPartOfLists([]);
+				}
+			});
 		} else {
 			setUserLists([]);
 			setSelectedListID({ listID: "", uid: "" });
 		}
 	}, [userInfo, setSelectedListID]);
+
+	useEffect(() => {
+		const unsubscribes = [];
+
+		groupListsPath.forEach((listPath) => {
+			const listRef = ref(database, listPath);
+			const unsubscribe = onValue(listRef, (snapshot) => {
+				setListDeletionStatus((prevStatus) => ({
+					...prevStatus,
+					[listPath]: !snapshot.exists(),
+				}));
+
+				if (!snapshot.exists() && selectedListID.listID === listPath) {
+					setSelectedListID({ listID: "", uid: "" });
+				}
+			});
+
+			unsubscribes.push(unsubscribe);
+		});
+
+		return () => {
+			unsubscribes.forEach((unsubscribe) => unsubscribe());
+		};
+	}, [groupListsPath, selectedListID]);
 
 	const removeList = (listId) => {
 		setSelectedListID({ listID: "", uid: "" });

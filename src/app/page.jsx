@@ -7,7 +7,7 @@ import Image from "next/image";
 import octupus from "./images/octupus.png";
 
 export default function Home() {
-	const [selectedList, setSelectedListID] = useState({ listID: "", uid: "" });
+	const [selectedListID, setSelectedListID] = useState({ listID: "", uid: "" });
 
 	const [notificationPermission, setNotificationPermission] =
 		useState("default");
@@ -38,7 +38,10 @@ export default function Home() {
 		<>
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen">
 				<div>
-					<Sidebar setSelectedListID={setSelectedListID} />
+					<Sidebar
+						setSelectedListID={setSelectedListID}
+						selectedListID={selectedListID}
+					/>
 				</div>
 
 				<div className="flex flex-col flex-grow max-w-xs h-auto mx-auto justify-center my-10">
@@ -51,7 +54,7 @@ export default function Home() {
 					/>
 
 					<div className="flex justify-center md:items-center  w-full">
-						{userInfo && <List listInfo={selectedList} />}
+						{userInfo && <List listInfo={selectedListID} />}
 					</div>
 				</div>
 			</div>
