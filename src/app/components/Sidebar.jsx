@@ -315,6 +315,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 														listID: list.id,
 														uid: sharedListOwner,
 													});
+													console.log(list.id + " and " + sharedListOwner);
 												}}>
 												{list.title}
 											</li>
