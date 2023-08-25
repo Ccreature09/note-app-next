@@ -2,7 +2,7 @@
 	"name": "Octonotes",
 	"short_name": "Octo!",
 	"theme_color": "#000000",
-	"background_color": "#000000",
+	"background_color": "#14A6EF",
 	"display": "standalone",
 	"orientation": "portrait",
 	"scope": "/",
