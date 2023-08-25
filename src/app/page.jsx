@@ -41,7 +41,7 @@ export default function Home() {
         </div>
 
         <div className='flex flex-col flex-grow max-w-xs h-auto mx-auto justify-center my-10'>
-          <Image width={160} height={160} src={octupus} className='w-32 h-32 mx-auto mb-5' alt='' />
+          <Image width={160} height={160} src={octupus} priority='true' className='w-32 h-32 mx-auto mb-5' alt='' />
 
           <div className='flex justify-center md:items-center  w-full'>
             {userInfo && <List listInfo={selectedListID} />}
