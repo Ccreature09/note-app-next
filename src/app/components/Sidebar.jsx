@@ -265,9 +265,9 @@ export const Sidebar = ({ setSelectedListID }) => {
 														uid: userInfo.uid,
 													});
 												}}>
-												<div className="text-center">{list.title}</div>
+												{list.title}
 											</li>
-											<div flex>
+											<div>
 												{list.type == "group" && (
 													<button
 														className="ml-2 text-green-500 bg-[#1D3557] p-1.5 mb-3 rounded flex h-1/2"
