@@ -129,9 +129,9 @@ export const CreateList = () => {
 							{listType === "group" && (
 								<div className="mt-4">
 									<h3 className="text-lg font-semibold mb-2 text-center">
-										List Members (seperate with comma):
+										List Members (separate with comma):
 									</h3>
-									{listMembers.length > 1 && (
+									{listMembers.length > 0 && (
 										<ul className="list-none flex flex-wrap gap-3 mb-3">
 											{listMembers.map((member, index) => (
 												<li
@@ -145,9 +145,15 @@ export const CreateList = () => {
 
 									<input
 										type="text"
-										placeholder="email / username"
-										value={listMembers.join(",")}
-										onChange={(e) => setListMembers(e.target.value.split(","))}
+										placeholder="Enter email"
+										value={listMembers.join(", ")}
+										onChange={(e) => {
+											const inputValue = e.target.value;
+											const membersArray = inputValue
+												? inputValue.split(",").map((member) => member.trim())
+												: [];
+											setListMembers(membersArray);
+										}}
 										className="text-center w-full text-5xl mb-5"
 									/>
 								</div>

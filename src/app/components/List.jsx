@@ -6,8 +6,14 @@ import { database } from "../firebase/firebase";
 import { Auth } from "../firebase/Auth";
 
 export const List = ({ listInfo }) => {
-	const listID = JSON.stringify(listInfo.listID).replace(/['"]+/g, "");
-	const listUID = JSON.stringify(listInfo.uid).replace(/['"]+/g, "");
+	const listID =
+		listInfo && listInfo.listID
+			? JSON.stringify(listInfo.listID).replace(/['"]+/g, "")
+			: "";
+	const listUID =
+		listInfo && listInfo.uid
+			? JSON.stringify(listInfo.uid).replace(/['"]+/g, "")
+			: "";
 	const userInfo = Auth();
 	const isAnonymous = userInfo && userInfo.isAnonymous;
 

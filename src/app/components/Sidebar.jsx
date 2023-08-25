@@ -25,13 +25,18 @@ export const Sidebar = ({ setSelectedListID }) => {
 	const email = userInfo && userInfo.email;
 	const [activeListItem, setActiveListItem] = useState("");
 
-	const [isListCollapsed, setListCollapsed] = useState(false);
+	const [ListCollapsed, setListCollapsed] = useState(false);
 	const [userLists, setUserLists] = useState([]);
 	const [userPartOfLists, setUserPartOfLists] = useState([]);
 	const [sharedListOwner, setSharedListOwner] = useState();
+	const [memberList, setToggleMemberList] = useState(false);
 
 	const toggleListCollapse = () => {
 		setListCollapsed((prevCollapsed) => !prevCollapsed);
+	};
+
+	const toggleMemberList = () => {
+		setToggleMemberList(!memberList);
 	};
 
 	useEffect(() => {
@@ -75,10 +80,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 							const userLists = users[uid].lists || {};
 							Object.keys(userLists).forEach((listID) => {
 								const members = userLists[listID].members || [];
-								if (
-									members.includes(userInfo.email) ||
-									members.includes(userInfo.displayName)
-								) {
+								if (members.includes(userInfo.email)) {
 									otherUsersLists.push(userLists[listID]);
 									setSharedListOwner(uid);
 								}
@@ -200,7 +202,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 								<button
 									className="text-[#F1FAEE] m-auto font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-white border-2 rounded-lg"
 									onClick={toggleListCollapse}>
-									{isListCollapsed ? (
+									{ListCollapsed ? (
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											fill="none"
@@ -234,7 +236,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 						)}
 
 						{userLists.length > 0 && (
-							<div className={`${isListCollapsed ? "hidden" : ""}`}>
+							<div className={`${ListCollapsed ? "hidden" : ""}`}>
 								<p
 									className={
 										"text-[#F1FAEE] font-bold text-2xl mb-2 text-center"
@@ -247,7 +249,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 									{userLists.map((list) => (
 										<div
 											className={`flex items-center justify-between p-4 ${
-												isListCollapsed ? "hidden" : ""
+												ListCollapsed ? "hidden" : ""
 											}`}
 											key={list.id}>
 											<li
@@ -263,26 +265,50 @@ export const Sidebar = ({ setSelectedListID }) => {
 														uid: userInfo.uid,
 													});
 												}}>
-												{list.title}
+												<div className="text-center">{list.title}</div>
 											</li>
-											<button
-												className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded"
-												onClick={(e) => {
-													e.stopPropagation();
-													removeList(list.id);
-												}}>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-													fill="currentColor"
-													className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
-													<path
-														fillRule="evenodd"
-														d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
-														clipRule="evenodd"
-													/>
-												</svg>
-											</button>
+											<div flex>
+												{list.type == "group" && (
+													<button
+														className="ml-2 text-green-500 bg-[#1D3557] p-1.5 mb-3 rounded flex h-1/2"
+														onClick={(e) => {
+															e.stopPropagation();
+															toggleMemberList();
+														}}>
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															fill="none"
+															viewBox="0 0 24 24"
+															strokeWidth={1.5}
+															stroke="currentColor"
+															className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
+															<path
+																strokeLinecap="round"
+																strokeLinejoin="round"
+																d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+															/>
+														</svg>
+													</button>
+												)}
+												<button
+													className="ml-2 text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded h-1/2 flex"
+													onClick={(e) => {
+														e.stopPropagation();
+														removeList(list.id);
+													}}>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 24 24"
+														fill="currentColor"
+														className="w-9 h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200">
+														<path
+															fillRule="evenodd"
+															d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
+															clipRule="evenodd"
+														/>
+													</svg>
+												</button>
+											</div>
 										</div>
 									))}
 								</ul>{" "}
@@ -290,7 +316,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 						)}
 
 						{userPartOfLists.length > 0 && (
-							<div className={`${isListCollapsed ? "hidden" : ""}`}>
+							<div className={`${ListCollapsed ? "hidden" : ""}`}>
 								<p
 									className={`text-[#F1FAEE] font-bold text-2xl mb-2 text-center `}>
 									Shared Lists:
@@ -301,7 +327,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 									{userPartOfLists.map((list) => (
 										<div
 											className={`flex items-center justify-between p-4 ${
-												isListCollapsed ? "hidden" : ""
+												ListCollapsed ? "hidden" : ""
 											}`}
 											key={list.id}>
 											<li
