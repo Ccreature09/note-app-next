@@ -1,9 +1,16 @@
 /** @type {import('next').NextConfig} */
 
 const withPWA = require('next-pwa')({
-  dest: 'public',
-});
+  dest: 'public'
+})
 
 module.exports = withPWA({
-  // next.js config
-});
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com'
+      }
+    ]
+  }
+})
