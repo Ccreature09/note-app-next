@@ -36,11 +36,6 @@ export default function Home() {
 
 	return (
 		<>
-			<style jsx global>{`
-				html {
-					font-family: ${raleway.style.fontFamily};
-				}
-			`}</style>
 			<div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen">
 				<div>
 					<Sidebar setSelectedListID={setSelectedListID} />
