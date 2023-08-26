@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Auth, GoogleAuthButton, GuestAuthButton } from '../firebase/Auth';
-import { CreateList } from './CreateList';
 import { ref, remove, onValue, update } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import { Poiret_One } from 'next/font/google';
 import { Monoton } from 'next/font/google';
 import Image from 'next/image';
+
+import { CreateList } from './CreateList';
+import { MemberList } from './MemberList';
 
 const poiret_One = Poiret_One({
    subsets: ['latin'],
@@ -37,7 +39,8 @@ export const Sidebar = ({ setSelectedListID }) => {
    };
 
    const toggleMemberList = () => {
-      setToggleMemberList(!memberList);
+      setToggleMemberList((prevList) => !prevList);
+      console.log(memberList);
    };
 
    useEffect(() => {
@@ -50,7 +53,8 @@ export const Sidebar = ({ setSelectedListID }) => {
             );
             update(uid, {
                ['Name']: userInfo.displayName,
-               ['Email']: userInfo.email
+               ['Email']: userInfo.email,
+               ['PhotoURL']: userInfo.photoURL
             });
          }
 
@@ -203,6 +207,8 @@ export const Sidebar = ({ setSelectedListID }) => {
          ) : (
             <GoogleAuthButton />
          )}
+
+         {memberList && <MemberList></MemberList>}
 
          <CreateList></CreateList>
 
