@@ -22,6 +22,7 @@ const monoton = Monoton({
 
 export const Sidebar = ({ setSelectedListID }) => {
    const userInfo = Auth();
+   const [selectedListID, setselectedListID] = useState([]);
    const isAnonymous = userInfo && userInfo.isAnonymous;
    const img = userInfo && userInfo.photoURL;
    const name = userInfo && userInfo.displayName;
@@ -45,16 +46,17 @@ export const Sidebar = ({ setSelectedListID }) => {
 
    useEffect(() => {
       if (userInfo) {
-         setSelectedListID({ listID: '', uid: '' });
+         setselectedListID({ listID: '', uid: '' });
+         setSelectedListID(selectedListID);
          if (!userInfo.isAnonymous) {
             const uid = ref(
                database,
                `${userInfo.isAnonymous ? 'guests' : 'users'}/${userInfo.uid}`
             );
             update(uid, {
-               ['Name']: userInfo.displayName,
-               ['Email']: userInfo.email,
-               ['PhotoURL']: userInfo.photoURL
+               ['name']: userInfo.displayName,
+               ['email']: userInfo.email,
+               ['photoURL']: userInfo.photoURL
             });
          }
 
@@ -71,7 +73,8 @@ export const Sidebar = ({ setSelectedListID }) => {
                setUserLists(listsArray);
             } else {
                setUserLists([]);
-               setSelectedListID({ listID: '', uid: '' });
+               setselectedListID({ listID: '', uid: '' });
+               setSelectedListID(selectedListID);
             }
          });
 
@@ -100,7 +103,8 @@ export const Sidebar = ({ setSelectedListID }) => {
          });
       } else {
          setUserLists([]);
-         setSelectedListID({ listID: '', uid: '' });
+         setselectedListID({ listID: '', uid: '' });
+         setSelectedListID(selectedListID);
       }
    }, [userInfo, setSelectedListID]);
 
@@ -114,7 +118,8 @@ export const Sidebar = ({ setSelectedListID }) => {
          );
          const unsubscribe = onValue(listRef, (snapshot) => {
             if (!snapshot.exists()) {
-               setSelectedListID({ listID: '', uid: '' });
+               setselectedListID({ listID: '', uid: '' });
+               setSelectedListID(selectedListID);
             }
          });
 
@@ -127,7 +132,8 @@ export const Sidebar = ({ setSelectedListID }) => {
    }, [userPartOfLists, sharedListOwner, setSelectedListID]);
 
    const removeList = (listId) => {
-      setSelectedListID({ listID: '', uid: '' });
+      setselectedListID({ listID: '', uid: '' });
+      setSelectedListID(selectedListID);
 
       setUserLists((prevLists) =>
          prevLists.filter((list) => list.id !== listId)
@@ -208,7 +214,7 @@ export const Sidebar = ({ setSelectedListID }) => {
             <GoogleAuthButton />
          )}
 
-         {memberList && <MemberList></MemberList>}
+         {memberList && <MemberList selectedList={selectedListID}></MemberList>}
 
          <CreateList></CreateList>
 
@@ -285,10 +291,13 @@ export const Sidebar = ({ setSelectedListID }) => {
                                     }`}
                                     onClick={() => {
                                        setActiveListItem(list.id);
-                                       setSelectedListID({
+                                       console.log(selectedListID);
+
+                                       setselectedListID({
                                           listID: list.id,
                                           uid: userInfo.uid
                                        });
+                                       setSelectedListID(selectedListID);
                                     }}
                                  >
                                     {list.title}
@@ -374,13 +383,13 @@ export const Sidebar = ({ setSelectedListID }) => {
                                     }`}
                                     onClick={() => {
                                        setActiveListItem(list.id);
-                                       setSelectedListID({
+                                       setselectedListID({
                                           listID: list.id,
-                                          uid: sharedListOwner
+                                          uid: userInfo.uid
                                        });
-                                       console.log(
-                                          list.id + ' and ' + sharedListOwner
-                                       );
+                                       setSelectedListID(selectedListID);
+
+                                       console.log(selectedListID);
                                     }}
                                  >
                                     {list.title}
