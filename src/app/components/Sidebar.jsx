@@ -41,13 +41,12 @@ export const Sidebar = ({ setSelectedListID }) => {
 
    const toggleMemberList = () => {
       setToggleMemberList((prevList) => !prevList);
-      console.log(memberList);
    };
 
    useEffect(() => {
       if (userInfo) {
          setselectedListID({ listID: '', uid: '' });
-         setSelectedListID(selectedListID);
+         setSelectedListID({ listID: '', uid: '' });
          if (!userInfo.isAnonymous) {
             const uid = ref(
                database,
@@ -74,7 +73,7 @@ export const Sidebar = ({ setSelectedListID }) => {
             } else {
                setUserLists([]);
                setselectedListID({ listID: '', uid: '' });
-               setSelectedListID(selectedListID);
+               setSelectedListID({ listID: '', uid: '' });
             }
          });
 
@@ -104,7 +103,7 @@ export const Sidebar = ({ setSelectedListID }) => {
       } else {
          setUserLists([]);
          setselectedListID({ listID: '', uid: '' });
-         setSelectedListID(selectedListID);
+         setSelectedListID({ listID: '', uid: '' });
       }
    }, [userInfo, setSelectedListID]);
 
@@ -119,7 +118,7 @@ export const Sidebar = ({ setSelectedListID }) => {
          const unsubscribe = onValue(listRef, (snapshot) => {
             if (!snapshot.exists()) {
                setselectedListID({ listID: '', uid: '' });
-               setSelectedListID(selectedListID);
+               setSelectedListID({ listID: '', uid: '' });
             }
          });
 
@@ -133,7 +132,7 @@ export const Sidebar = ({ setSelectedListID }) => {
 
    const removeList = (listId) => {
       setselectedListID({ listID: '', uid: '' });
-      setSelectedListID(selectedListID);
+      setSelectedListID({ listID: '', uid: '' });
 
       setUserLists((prevLists) =>
          prevLists.filter((list) => list.id !== listId)
@@ -291,13 +290,15 @@ export const Sidebar = ({ setSelectedListID }) => {
                                     }`}
                                     onClick={() => {
                                        setActiveListItem(list.id);
-                                       console.log(selectedListID);
 
                                        setselectedListID({
                                           listID: list.id,
                                           uid: userInfo.uid
                                        });
-                                       setSelectedListID(selectedListID);
+                                       setSelectedListID({
+                                          listID: list.id,
+                                          uid: userInfo.uid
+                                       });
                                     }}
                                  >
                                     {list.title}
@@ -387,9 +388,10 @@ export const Sidebar = ({ setSelectedListID }) => {
                                           listID: list.id,
                                           uid: userInfo.uid
                                        });
-                                       setSelectedListID(selectedListID);
-
-                                       console.log(selectedListID);
+                                       setSelectedListID({
+                                          listID: list.id,
+                                          uid: userInfo.uid
+                                       });
                                     }}
                                  >
                                     {list.title}

@@ -24,8 +24,6 @@ export const List = ({ listInfo }) => {
    const [reminder, setReminder] = useState(false);
 
    const addItem = () => {
-      console.log(listID + '' + listUID);
-
       const ListInDB = ref(
          database,
          `${
