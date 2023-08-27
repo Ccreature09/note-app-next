@@ -59,7 +59,7 @@ export const CreateList = () => {
 
          {showOverlay && userInfo && (
             <div className="fixed top-0 left-0 w-full h-full bg-[rgba(60,84,150,0.48)] flex justify-center items-center">
-               <div className={'z-1 bg-white rounded-xl p-10 w-full max-w-lg'}>
+               <div className={' bg-white rounded-xl p-10 w-full max-w-lg'}>
                   <div className="popup ">
                      <p className="text-center text-7xl font-black mb-6 ">
                         What is the list&apos;s name?
