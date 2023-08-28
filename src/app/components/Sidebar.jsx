@@ -61,7 +61,9 @@ export const Sidebar = ({ setSelectedListID }) => {
 
          const userListsRef = ref(
             database,
-            `${userInfo.isAnonymous ? 'guests' : 'users'}/${userInfo.uid}/lists`
+            `${userInfo.isAnonymous ? 'guests' : 'users'}/${
+               userInfo.uid
+            }/lists/${selectedListID.listID}`
          );
          const otherUsersListsRef = ref(database, 'users');
 
@@ -290,7 +292,6 @@ export const Sidebar = ({ setSelectedListID }) => {
                                     }`}
                                     onClick={() => {
                                        setActiveListItem(list.id);
-
                                        setselectedListID({
                                           listID: list.id,
                                           uid: userInfo.uid

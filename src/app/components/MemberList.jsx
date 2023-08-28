@@ -160,7 +160,7 @@ export const MemberList = ({ selectedList }) => {
 
    return (
       <div className="z-10">
-         <div className="fixed top-24 right-14 w-80 sm:w-auto  flex justify-center items-center">
+         <div className="fixed top-24 right-14 w-80   flex justify-center items-center">
             <div className={' bg-white rounded-xl p-10 w-full max-w-lg'}>
                <div className="popup ">
                   <p className="text-5xl mb-2 text-center">Members:</p>
