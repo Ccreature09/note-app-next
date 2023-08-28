@@ -107,6 +107,10 @@ export const Sidebar = ({ setSelectedListID }) => {
          setselectedListID({ listID: '', uid: '' });
          setSelectedListID({ listID: '', uid: '' });
       }
+      return () => {
+         // This cleanup function will be called when the component unmounts
+         setToggleMemberList(false); // Set memberList to false when the component unmounts
+      };
    }, [userInfo, setSelectedListID]);
 
    useEffect(() => {
@@ -135,6 +139,7 @@ export const Sidebar = ({ setSelectedListID }) => {
    const removeList = (listId) => {
       setselectedListID({ listID: '', uid: '' });
       setSelectedListID({ listID: '', uid: '' });
+      toggleMemberList();
 
       setUserLists((prevLists) =>
          prevLists.filter((list) => list.id !== listId)
@@ -290,6 +295,7 @@ export const Sidebar = ({ setSelectedListID }) => {
                                           ? 'bg-[#457B9D]'
                                           : 'bg-[rgba(0,0,0,0.15)] hover:bg-[#457B9D]'
                                     }`}
+                                    key={list.id}
                                     onClick={() => {
                                        setActiveListItem(list.id);
                                        setselectedListID({

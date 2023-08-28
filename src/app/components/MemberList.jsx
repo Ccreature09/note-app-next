@@ -161,7 +161,17 @@ export const MemberList = ({ selectedList }) => {
    return (
       <div className="z-10">
          <div className="fixed top-24 right-14 w-80   flex justify-center items-center">
-            <div className={' bg-white rounded-xl p-10 w-full max-w-lg'}>
+            <div
+               className={` bg-white ${
+                  addUser && users
+                     ? 'border-green-500 border-4'
+                     : !addUser && !removeUser && members
+                     ? 'border-blue-500 border-4'
+                     : removeUser && members
+                     ? 'border-red-500 border-4'
+                     : ''
+               }   rounded-xl p-10 w-full max-w-lg`}
+            >
                <div className="popup ">
                   <p className="text-5xl mb-2 text-center">Members:</p>
                   <hr className="mb-3" />
@@ -284,6 +294,7 @@ export const MemberList = ({ selectedList }) => {
                               )}
                            </li>
                         ))}
+                        {members.length == 0 && <li>No members yet...</li>}
                      </ul>
                   )}
 
@@ -308,6 +319,9 @@ export const MemberList = ({ selectedList }) => {
                               <p className="text-2xl">{user.name}</p>
                            </li>
                         ))}
+                        {members.length == 0 && (
+                           <li>No members to remove...</li>
+                        )}
                      </ul>
                   )}
                </div>
