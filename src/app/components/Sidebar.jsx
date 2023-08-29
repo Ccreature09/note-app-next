@@ -305,7 +305,7 @@ export const Sidebar = ({ setSelectedListID }) => {
                                     }}
                                  >
                                     {list.title}
-                                    {console.log(userLists)}
+
                                     <div className="flex justify-between gap-4 mt-3">
                                        {list.type == 'group' &&
                                           selectedListID.listID == list.id && (
@@ -397,11 +397,11 @@ export const Sidebar = ({ setSelectedListID }) => {
                                              setActiveListItem(list.id);
                                              setselectedListID({
                                                 listID: list.id,
-                                                uid: userInfo.uid
+                                                uid: sharedListOwner
                                              });
                                              setSelectedListID({
                                                 listID: list.id,
-                                                uid: userInfo.uid
+                                                uid: sharedListOwner
                                              });
                                           }}
                                        >
