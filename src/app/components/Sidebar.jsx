@@ -305,6 +305,7 @@ export const Sidebar = ({ setSelectedListID }) => {
                                     }}
                                  >
                                     {list.title}
+                                    {console.log(userLists)}
                                     <div className="flex justify-between gap-4 mt-3">
                                        {list.type == 'group' &&
                                           selectedListID.listID == list.id && (
@@ -376,35 +377,41 @@ export const Sidebar = ({ setSelectedListID }) => {
                         <hr />
                         <br />
                         <ul>
-                           {userPartOfLists.map((list) => (
-                              <div
-                                 className={`flex items-center justify-between p-4 ${
-                                    listCollapsed ? 'hidden' : ''
-                                 }`}
-                                 key={list.id}
-                              >
-                                 <li
-                                    className={`transition-all duration-200 cursor-pointer text-2xl font-black p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
-                                       activeListItem === list.id
-                                          ? 'bg-[#457B9D]'
-                                          : 'bg-[#1D3557] hover:bg-[#457B9D]'
-                                    }`}
-                                    onClick={() => {
-                                       setActiveListItem(list.id);
-                                       setselectedListID({
-                                          listID: list.id,
-                                          uid: userInfo.uid
-                                       });
-                                       setSelectedListID({
-                                          listID: list.id,
-                                          uid: userInfo.uid
-                                       });
-                                    }}
-                                 >
-                                    {list.title}
-                                 </li>
-                              </div>
-                           ))}
+                           {userPartOfLists.map((list) => {
+                              const userIsMember = list.members.includes(email);
+                              if (userIsMember) {
+                                 return (
+                                    <div
+                                       className={`flex items-center justify-between p-4 ${
+                                          listCollapsed ? 'hidden' : ''
+                                       }`}
+                                       key={list.id}
+                                    >
+                                       <li
+                                          className={`transition-all duration-200 cursor-pointer text-2xl font-black p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
+                                             activeListItem === list.id
+                                                ? 'bg-[#457B9D]'
+                                                : 'bg-[#1D3557] hover:bg-[#457B9D]'
+                                          }`}
+                                          onClick={() => {
+                                             setActiveListItem(list.id);
+                                             setselectedListID({
+                                                listID: list.id,
+                                                uid: userInfo.uid
+                                             });
+                                             setSelectedListID({
+                                                listID: list.id,
+                                                uid: userInfo.uid
+                                             });
+                                          }}
+                                       >
+                                          {list.title}
+                                       </li>
+                                    </div>
+                                 );
+                              }
+                              return null;
+                           })}
                         </ul>
                      </div>
                   )}
