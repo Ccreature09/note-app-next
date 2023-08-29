@@ -17,23 +17,19 @@ export const MemberList = ({ selectedList }) => {
          return;
       }
 
-      // Update your list in the database to include the new user's email
       const listRef = ref(
          database,
          `users/${userInfo.uid}/lists/${selectedList.listID}/members`
       );
 
-      // Fetch the current list of members
       const listMembersSnapshot = await get(listRef);
       const listMembers = listMembersSnapshot.val() || [];
 
-      // Only add the user if they're not already in the list
       if (!listMembers.includes(user.email)) {
          listMembers.push(user.email);
-         // Update the list in the database
+
          await set(listRef, listMembers);
 
-         // Refresh the list of members to show the newly added user
          const updatedMembers = [...members, user];
          setMembers(updatedMembers);
       }
@@ -44,26 +40,21 @@ export const MemberList = ({ selectedList }) => {
          return;
       }
 
-      // Update your list in the database to remove the user's email
       const listRef = ref(
          database,
          `users/${userInfo.uid}/lists/${selectedList.listID}/members`
       );
 
-      // Fetch the current list of members
       const listMembersSnapshot = await get(listRef);
       const listMembers = listMembersSnapshot.val() || [];
 
-      // Only remove the user if they're in the list
       if (listMembers.includes(user.email)) {
          const updatedListMembers = listMembers.filter(
             (email) => email !== user.email
          );
 
-         // Update the list in the database
          await set(listRef, updatedListMembers);
 
-         // Refresh the list of members to show the removed user
          const updatedMembers = members.filter(
             (member) => member.email !== user.email
          );
@@ -79,7 +70,6 @@ export const MemberList = ({ selectedList }) => {
                const users = snapshot.val();
                const usersList = [];
 
-               // Fetch list members
                const listMembersRef = ref(
                   database,
                   `users/${selectedList.uid}/lists/${selectedList.listID}/members`

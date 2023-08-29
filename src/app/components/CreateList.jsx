@@ -6,14 +6,16 @@ import { Auth } from '../firebase/Auth';
 export const CreateList = () => {
    const userInfo = Auth();
 
-   const [showOverlay, setShowOverlay] = useState(false);
    const [listName, setListName] = useState('');
-   const [listType, setListType] = useState('individual');
-   const [listMembers, setListMembers] = useState([]);
    const [error, setError] = useState('');
+   const [listType, setListType] = useState('individual');
+   const [showOverlay, setShowOverlay] = useState(false);
+   const [listMembers, setListMembers] = useState([]);
 
    const toggleOverlay = () => {
+      setListType('individual');
       setShowOverlay(!showOverlay);
+
       setError('');
    };
 

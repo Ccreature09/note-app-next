@@ -22,26 +22,19 @@ const monoton = Monoton({
 
 export const Sidebar = ({ setSelectedListID }) => {
    const userInfo = Auth();
-   const [selectedListID, setselectedListID] = useState([]);
+
    const isAnonymous = userInfo && userInfo.isAnonymous;
    const img = userInfo && userInfo.photoURL;
    const name = userInfo && userInfo.displayName;
    const email = userInfo && userInfo.email;
+
    const [activeListItem, setActiveListItem] = useState('');
-
-   const [ListCollapsed, setListCollapsed] = useState(false);
    const [userLists, setUserLists] = useState([]);
+   const [selectedListID, setselectedListID] = useState([]);
    const [userPartOfLists, setUserPartOfLists] = useState([]);
+   const [listCollapsed, setlistCollapsed] = useState(false);
+   const [memberList, setMemberList] = useState(false);
    const [sharedListOwner, setSharedListOwner] = useState();
-   const [memberList, setToggleMemberList] = useState(false);
-
-   const toggleListCollapse = () => {
-      setListCollapsed((prevCollapsed) => !prevCollapsed);
-   };
-
-   const toggleMemberList = () => {
-      setToggleMemberList((prevList) => !prevList);
-   };
 
    useEffect(() => {
       if (userInfo) {
@@ -108,8 +101,7 @@ export const Sidebar = ({ setSelectedListID }) => {
          setSelectedListID({ listID: '', uid: '' });
       }
       return () => {
-         // This cleanup function will be called when the component unmounts
-         setToggleMemberList(false); // Set memberList to false when the component unmounts
+         setMemberList(false);
       };
    }, [userInfo, setSelectedListID]);
 
@@ -139,7 +131,7 @@ export const Sidebar = ({ setSelectedListID }) => {
    const removeList = (listId) => {
       setselectedListID({ listID: '', uid: '' });
       setSelectedListID({ listID: '', uid: '' });
-      toggleMemberList();
+      setMemberList(false);
 
       setUserLists((prevLists) =>
          prevLists.filter((list) => list.id !== listId)
@@ -231,9 +223,13 @@ export const Sidebar = ({ setSelectedListID }) => {
                      <div className="flex">
                         <button
                            className="text-[#F1FAEE] m-auto font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-white border-2 rounded-lg"
-                           onClick={toggleListCollapse}
+                           onClick={() => {
+                              setlistCollapsed(
+                                 (prevCollapsed) => !prevCollapsed
+                              );
+                           }}
                         >
-                           {ListCollapsed ? (
+                           {listCollapsed ? (
                               <svg
                                  xmlns="http://www.w3.org/2000/svg"
                                  fill="none"
@@ -269,7 +265,7 @@ export const Sidebar = ({ setSelectedListID }) => {
                   )}
 
                   {userLists.length > 0 && (
-                     <div className={` ${ListCollapsed ? 'hidden' : ''}`}>
+                     <div className={` ${listCollapsed ? 'hidden' : ''}`}>
                         <div className="mx-2">
                            <p
                               className={
@@ -285,7 +281,7 @@ export const Sidebar = ({ setSelectedListID }) => {
                            {userLists.map((list) => (
                               <div
                                  className={`flex items-center justify-between p-4 ${
-                                    ListCollapsed ? 'hidden' : ''
+                                    listCollapsed ? 'hidden' : ''
                                  }`}
                                  key={list.id}
                               >
@@ -316,7 +312,9 @@ export const Sidebar = ({ setSelectedListID }) => {
                                                 className="w-1/2 text-green-500 bg-[#1D3557] p-1.5 mb-3 rounded"
                                                 onClick={(e) => {
                                                    e.stopPropagation();
-                                                   toggleMemberList();
+                                                   setMemberList(
+                                                      (prevList) => !prevList
+                                                   );
                                                 }}
                                              >
                                                 <svg
@@ -369,7 +367,7 @@ export const Sidebar = ({ setSelectedListID }) => {
                   )}
 
                   {userPartOfLists.length > 0 && (
-                     <div className={`${ListCollapsed ? 'hidden' : ''}`}>
+                     <div className={`${listCollapsed ? 'hidden' : ''}`}>
                         <p
                            className={`text-[#F1FAEE] font-bold text-2xl mb-2 text-center `}
                         >
@@ -381,7 +379,7 @@ export const Sidebar = ({ setSelectedListID }) => {
                            {userPartOfLists.map((list) => (
                               <div
                                  className={`flex items-center justify-between p-4 ${
-                                    ListCollapsed ? 'hidden' : ''
+                                    listCollapsed ? 'hidden' : ''
                                  }`}
                                  key={list.id}
                               >

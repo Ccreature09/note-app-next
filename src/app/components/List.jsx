@@ -6,6 +6,8 @@ import { database } from '../firebase/firebase';
 import { Auth } from '../firebase/Auth';
 
 export const List = ({ listInfo }) => {
+   const userInfo = Auth();
+   const isAnonymous = userInfo && userInfo.isAnonymous;
    const listID =
       listInfo && listInfo.listID
          ? JSON.stringify(listInfo.listID).replace(/['"]+/g, '')
@@ -14,13 +16,11 @@ export const List = ({ listInfo }) => {
       listInfo && listInfo.uid
          ? JSON.stringify(listInfo.uid).replace(/['"]+/g, '')
          : '';
-   const userInfo = Auth();
-   const isAnonymous = userInfo && userInfo.isAnonymous;
 
    const [inputValue, setInputValue] = useState('');
    const [error, setError] = useState('');
-   const [items, setItems] = useState([]);
    const [reminderTime, setReminderTime] = useState('');
+   const [items, setItems] = useState([]);
    const [reminder, setReminder] = useState(false);
 
    const addItem = () => {
