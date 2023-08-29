@@ -113,8 +113,10 @@ export const Sidebar = ({ setSelectedListID }) => {
             database,
             `users/${sharedListOwner}/lists/${list.id}`
          );
+
          const unsubscribe = onValue(listRef, (snapshot) => {
-            if (!snapshot.exists()) {
+            const members = snapshot.child('members').val() || [];
+            if (!snapshot.exists() || !members.includes(email)) {
                setselectedListID({ listID: '', uid: '' });
                setSelectedListID({ listID: '', uid: '' });
             }
