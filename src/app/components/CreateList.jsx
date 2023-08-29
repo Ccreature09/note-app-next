@@ -138,16 +138,18 @@ export const CreateList = () => {
                               List Members (separate with comma):
                            </h3>
                            {listMembers.length > 0 && (
-                              <ul className="list-none flex flex-wrap gap-3 mb-3">
-                                 {listMembers.map((member, index) => (
-                                    <li
-                                       className="hover:bg-slate-300 transition-all duration-200 cursor-pointer text-3xl font-bold bg-slate-200 p-4 rounded-lg flex-grow text-center"
-                                       key={index}
-                                    >
-                                       {member}
-                                    </li>
-                                 ))}
-                              </ul>
+                              <div className="overflow-x-auto">
+                                 <ul className="list-none flex flex-wrap gap-3 mb-3">
+                                    {listMembers.map((member, index) => (
+                                       <li
+                                          className="hover:bg-slate-300 transition-all duration-200 cursor-pointer text-3xl font-bold bg-slate-200 p-4 rounded-lg flex-grow text-center"
+                                          key={index}
+                                       >
+                                          {member}
+                                       </li>
+                                    ))}
+                                 </ul>
+                              </div>
                            )}
 
                            <input
