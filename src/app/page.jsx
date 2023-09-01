@@ -45,12 +45,12 @@ export default function Home() {
    return (
       <>
          <div
-            className={`flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen ${
+            className={`flex flex-col md:flex-row bg-gradient-to-b  min-h-screen ${
                theme == 'ocean'
                   ? 'from-[#A8DADC] to-[#1D3557]'
                   : theme == 'light'
                   ? 'from-[#a8edea] to-[#fed6e3]'
-                  : theme == 'dark' && 'from-[#424549] to-[#282b30]'
+                  : theme == 'dark' && 'from-[#6b6d70] to-[#282b30]'
             }`}
          >
             <div>

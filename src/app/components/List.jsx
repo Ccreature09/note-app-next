@@ -170,9 +170,9 @@ export const List = ({ listInfo, theme }) => {
                {error && <p className="text-red-500">{error}</p>}
                <button
                   onClick={addItem}
-                  className={`p-4 rounded-lg text-xl text-center mb-3 text-[#fdfdfd] bg-[#457b9d] ${
+                  className={`p-4 rounded-lg text-xl text-center mb-3  ${
                      theme === 'ocean'
-                        ? 'bg-[#1D3557]'
+                        ? 'bg-[#1D3557] text-[#f0e9d6]'
                         : theme === 'light'
                         ? 'bg-[#1e2124] text-[#f0e9d6] '
                         : theme === 'dark'
