@@ -57,7 +57,7 @@ export const CreateList = ({ theme }) => {
                   theme == 'ocean'
                      ? 'bg-[#70A9A1] text-[#f0e9d6]'
                      : theme == 'light'
-                     ? 'bg-gray-800 text-[#f0e9d6]'
+                     ? 'bg-[#1e2124] text-[#f0e9d6]'
                      : theme == 'dark' && 'bg-[#f0e9d6] text-gray-800'
                }`}
             >

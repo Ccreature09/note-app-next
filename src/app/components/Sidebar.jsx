@@ -160,7 +160,7 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                : theme === 'light'
                ? 'bg-[#f0e9d6]'
                : theme === 'dark'
-               ? 'bg-gray-800'
+               ? 'bg-[#1e2124]'
                : ''
          } md:h-screen w-full md:w-64 ${
             poiret_One.variable
@@ -367,12 +367,12 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                                              : 'bg-[#1D3557] hover:bg-[#457B9D]'
                                           : theme === 'light'
                                           ? activeListItem === list.id
-                                             ? 'bg-blue-400'
-                                             : 'bg-gray-800 hover:bg-blue-400'
+                                             ? 'bg-green-400'
+                                             : 'bg-gray-800 hover:bg-green-400'
                                           : theme === 'dark'
                                           ? activeListItem === list.id
-                                             ? 'bg-blue-400 text-[#f0e9d6]'
-                                             : 'bg-[#f0e9d6] hover:bg-blue-400 text-gray-800'
+                                             ? 'bg-green-400 text-[#f0e9d6]'
+                                             : 'bg-[#f0e9d6] hover:bg-green-400 text-gray-800'
                                           : ''
                                     }`}
                                     key={list.id}
@@ -493,12 +493,12 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                                                    : 'bg-[#1D3557] hover:bg-[#457B9D]'
                                                 : theme === 'light'
                                                 ? activeListItem === list.id
-                                                   ? 'bg-blue-400'
-                                                   : 'bg-gray-800 hover:bg-blue-400'
+                                                   ? 'bg-green-400'
+                                                   : 'bg-gray-800 hover:bg-green-400'
                                                 : theme === 'dark'
                                                 ? activeListItem === list.id
-                                                   ? 'bg-blue-400 text-[#f0e9d6]'
-                                                   : 'bg-[#f0e9d6] hover:bg-blue-400 text-gray-800'
+                                                   ? 'bg-green-400 text-[#f0e9d6]'
+                                                   : 'bg-[#f0e9d6] hover:bg-green-400 text-gray-800'
                                                 : ''
                                           }`}
                                           onClick={() => {

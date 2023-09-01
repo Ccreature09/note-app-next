@@ -5,7 +5,7 @@ import { onValue, ref, push, remove } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import { Auth } from '../firebase/Auth';
 
-export const List = ({ listInfo }) => {
+export const List = ({ listInfo, theme }) => {
    const userInfo = Auth();
    const isAnonymous = userInfo && userInfo.isAnonymous;
    const listID =
@@ -170,7 +170,15 @@ export const List = ({ listInfo }) => {
                {error && <p className="text-red-500">{error}</p>}
                <button
                   onClick={addItem}
-                  className="p-4 rounded-lg text-xl text-center mb-3 text-[#fdfdfd] bg-[#457b9d] w-full"
+                  className={`p-4 rounded-lg text-xl text-center mb-3 text-[#fdfdfd] bg-[#457b9d] ${
+                     theme === 'ocean'
+                        ? 'bg-[#1D3557]'
+                        : theme === 'light'
+                        ? 'bg-[#1e2124] text-[#f0e9d6] '
+                        : theme === 'dark'
+                        ? 'bg-[#f0e9d6] text-[#1e2124]'
+                        : ''
+                  } w-full`}
                >
                   <p>Add to List</p>
                </button>
@@ -179,7 +187,13 @@ export const List = ({ listInfo }) => {
                      <li
                         key={itemId}
                         onClick={() => removeItem(itemId)}
-                        className="hover:bg-[#E63946] transition-all duration-200 cursor-pointer text-xl bg-[#F1FAEE] p-4 rounded-lg flex-grow text-center"
+                        className={`hover:bg-[#E63946] transition-all duration-200 cursor-pointer text-xl  p-4 rounded-lg flex-grow text-center ${
+                           theme == 'ocean'
+                              ? 'bg-[#70A9A1] text-[#f0e9d6]'
+                              : theme == 'light'
+                              ? 'bg-[#f0e9d6] text-[#1e2124]'
+                              : theme == 'dark' && 'bg-[#1e2124] text-[#f0e9d6]'
+                        }`}
                      >
                         <div>{item.name}</div>
                         {item.formattedTime && (
