@@ -31,7 +31,9 @@ export const GoogleAuthButton = () => {
 
    return (
       <button
-         className="mb-4 border-none bg-green-500 p-2 text-2xl rounded  text-[#F1FAEE]"
+         className={`mb-4 border-none  p-2 text-2xl rounded  text-[#F1FAEE] ${
+            userInfo ? 'bg-red-500' : 'bg-green-500'
+         }`}
          onClick={handleAuthClick}
       >
          {userInfo ? 'Sign Out' : 'Sign In with Google'}

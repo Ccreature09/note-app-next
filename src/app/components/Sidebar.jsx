@@ -20,7 +20,7 @@ const monoton = Monoton({
    variable: '--font-monoton'
 });
 
-export const Sidebar = ({ setSelectedListID }) => {
+export const Sidebar = ({ setSelectedListID, theme }) => {
    const userInfo = Auth();
 
    const isAnonymous = userInfo && userInfo.isAnonymous;
@@ -154,15 +154,39 @@ export const Sidebar = ({ setSelectedListID }) => {
 
    return (
       <div
-         className={`flex flex-col p-4 bg-[#1D3557] md:h-screen w-full md:w-64 ${poiret_One.variable} font-sans`}
+         className={`flex flex-col p-4 ${
+            theme === 'ocean'
+               ? 'bg-[#1D3557]'
+               : theme === 'light'
+               ? 'bg-[#f0e9d6]'
+               : theme === 'dark'
+               ? 'bg-gray-800'
+               : ''
+         } md:h-screen w-full md:w-64 ${
+            poiret_One.variable
+         } transition-all duration-200 font-sans`}
       >
          <h1
-            className={` ${monoton.variable} font-mono text-white text-3xl font-medium text-center mb-5 `}
+            className={` ${monoton.variable} ${
+               theme === 'ocean' || theme === 'dark'
+                  ? 'text-[#f0e9d6]'
+                  : theme === 'light'
+                  ? 'text-gray-800'
+                  : ''
+            } font-mono text-3xl font-medium text-center mb-5 `}
          >
             Octonotes
          </h1>
 
-         <hr />
+         <hr
+            className={`${
+               theme === 'ocean' || theme === 'dark'
+                  ? 'border-[#f0e9d6]'
+                  : theme === 'light'
+                  ? 'border-gray-800'
+                  : ''
+            }`}
+         />
          <br />
          {userInfo && isAnonymous && (
             <svg
@@ -195,8 +219,26 @@ export const Sidebar = ({ setSelectedListID }) => {
                   alt="Picture of the author"
                />
                <div className="flex flex-col">
-                  <p className="text-[#F1FAEE] font-black text-2xl">{name}</p>
-                  <p className="text-[#F1FAEE] text-base truncate md:w-auto">
+                  <p
+                     className={`text-[#F1FAEE] font-black text-2xl ${
+                        theme == 'ocean'
+                           ? 'text-[#f0e9d6]'
+                           : theme == 'light'
+                           ? 'text-gray-800'
+                           : theme == 'dark' && 'text-[#f0e9d6]'
+                     } `}
+                  >
+                     {name}
+                  </p>
+                  <p
+                     className={`text-[#F1FAEE] text-base truncate md:w-auto ${
+                        theme == 'ocean'
+                           ? 'text-[#f0e9d6]'
+                           : theme == 'light'
+                           ? 'text-gray-800'
+                           : theme == 'dark' && 'text-[#f0e9d6]'
+                     }`}
+                  >
                      {email}
                   </p>
                </div>
@@ -216,15 +258,21 @@ export const Sidebar = ({ setSelectedListID }) => {
 
          {memberList && <MemberList selectedList={selectedListID}></MemberList>}
 
-         <CreateList></CreateList>
+         <CreateList theme={theme}></CreateList>
 
          <div>
             {userInfo && (
                <div>
                   {userLists.length > 0 && (
-                     <div className="flex">
+                     <div className="flex ">
                         <button
-                           className="text-[#F1FAEE] m-auto font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-white border-2 rounded-lg"
+                           className={`text-[#F1FAEE] m-auto font-semibold text-sm mb-2 cursor-pointer py-1 px-36 lg:px-24 md:px-24 border-2 rounded-lg ${
+                              theme === 'ocean' || theme === 'dark'
+                                 ? 'border-[#f0e9d6]'
+                                 : theme === 'light'
+                                 ? 'border-gray-800'
+                                 : ''
+                           }`}
                            onClick={() => {
                               setlistCollapsed(
                                  (prevCollapsed) => !prevCollapsed
@@ -238,7 +286,13 @@ export const Sidebar = ({ setSelectedListID }) => {
                                  viewBox="0 0 24 24"
                                  strokeWidth={1.5}
                                  stroke="currentColor"
-                                 className="w-6 h-6"
+                                 className={`w-6 h-6 ${
+                                    theme === 'ocean' || theme === 'dark'
+                                       ? 'text-[#f0e9d6]'
+                                       : theme === 'light'
+                                       ? 'text-gray-800'
+                                       : ''
+                                 } `}
                               >
                                  <path
                                     strokeLinecap="round"
@@ -253,7 +307,13 @@ export const Sidebar = ({ setSelectedListID }) => {
                                  viewBox="0 0 24 24"
                                  strokeWidth="1.5"
                                  stroke="currentColor"
-                                 className="w-6 h-6"
+                                 className={`w-6 h-6 ${
+                                    theme === 'ocean' || theme === 'dark'
+                                       ? 'text-[#f0e9d6]'
+                                       : theme === 'light'
+                                       ? 'text-gray-800'
+                                       : ''
+                                 } `}
                               >
                                  <path
                                     strokeLinecap="round"
@@ -270,13 +330,25 @@ export const Sidebar = ({ setSelectedListID }) => {
                      <div className={` ${listCollapsed ? 'hidden' : ''}`}>
                         <div className="mx-2">
                            <p
-                              className={
-                                 'text-[#F1FAEE] font-bold text-2xl mb-2 text-center'
-                              }
+                              className={` font-bold text-2xl mb-2 text-center ${
+                                 theme == 'ocean'
+                                    ? 'text-[#f0e9d6]'
+                                    : theme == 'light'
+                                    ? 'text-gray-800'
+                                    : theme == 'dark' && 'text-[#f0e9d6]'
+                              } `}
                            >
                               My Lists:
                            </p>
-                           <hr />
+                           <hr
+                              className={`${
+                                 theme === 'ocean' || theme === 'dark'
+                                    ? 'border-[#f0e9d6]'
+                                    : theme === 'light'
+                                    ? 'border-gray-800'
+                                    : ''
+                              }`}
+                           />
                         </div>
 
                         <ul>
@@ -289,9 +361,19 @@ export const Sidebar = ({ setSelectedListID }) => {
                               >
                                  <li
                                     className={`transition-all duration-200 cursor-pointer w-full text-2xl font-black p-3 rounded-lg text-center text-[#F1FAEE] overflow-auto ${
-                                       activeListItem === list.id
-                                          ? 'bg-[#457B9D]'
-                                          : 'bg-[rgba(0,0,0,0.15)] hover:bg-[#457B9D]'
+                                       theme === 'ocean'
+                                          ? activeListItem === list.id
+                                             ? 'bg-[#457B9D]'
+                                             : 'bg-[#1D3557] hover:bg-[#457B9D]'
+                                          : theme === 'light'
+                                          ? activeListItem === list.id
+                                             ? 'bg-blue-400'
+                                             : 'bg-gray-800 hover:bg-blue-400'
+                                          : theme === 'dark'
+                                          ? activeListItem === list.id
+                                             ? 'bg-blue-400 text-[#f0e9d6]'
+                                             : 'bg-[#f0e9d6] hover:bg-blue-400 text-gray-800'
+                                          : ''
                                     }`}
                                     key={list.id}
                                     onClick={() => {
@@ -372,11 +454,25 @@ export const Sidebar = ({ setSelectedListID }) => {
                   {userPartOfLists.length > 0 && (
                      <div className={`${listCollapsed ? 'hidden' : ''}`}>
                         <p
-                           className={`text-[#F1FAEE] font-bold text-2xl mb-2 text-center `}
+                           className={`text-[#F1FAEE] font-bold text-2xl mb-2 text-center ${
+                              theme == 'ocean'
+                                 ? 'text-[#f0e9d6]'
+                                 : theme == 'light'
+                                 ? 'text-gray-800'
+                                 : theme == 'dark' && 'text-[#f0e9d6]'
+                           } `}
                         >
                            Shared Lists:
                         </p>
-                        <hr />
+                        <hr
+                           className={`${
+                              theme === 'ocean' || theme === 'dark'
+                                 ? 'border-[#f0e9d6]'
+                                 : theme === 'light'
+                                 ? 'border-gray-800'
+                                 : ''
+                           }`}
+                        />
                         <br />
                         <ul>
                            {userPartOfLists.map((list) => {
@@ -390,10 +486,20 @@ export const Sidebar = ({ setSelectedListID }) => {
                                        key={list.id}
                                     >
                                        <li
-                                          className={`transition-all duration-200 cursor-pointer text-2xl font-black p-3 mb-3 rounded-lg flex-grow text-center text-[#F1FAEE] max-w-2xl overflow-auto ${
-                                             activeListItem === list.id
-                                                ? 'bg-[#457B9D]'
-                                                : 'bg-[#1D3557] hover:bg-[#457B9D]'
+                                          className={`transition-all duration-200 cursor-pointer w-full text-2xl font-black p-3 rounded-lg text-center text-[#F1FAEE] overflow-auto ${
+                                             theme === 'ocean'
+                                                ? activeListItem === list.id
+                                                   ? 'bg-[#457B9D]'
+                                                   : 'bg-[#1D3557] hover:bg-[#457B9D]'
+                                                : theme === 'light'
+                                                ? activeListItem === list.id
+                                                   ? 'bg-blue-400'
+                                                   : 'bg-gray-800 hover:bg-blue-400'
+                                                : theme === 'dark'
+                                                ? activeListItem === list.id
+                                                   ? 'bg-blue-400 text-[#f0e9d6]'
+                                                   : 'bg-[#f0e9d6] hover:bg-blue-400 text-gray-800'
+                                                : ''
                                           }`}
                                           onClick={() => {
                                              setActiveListItem(list.id);
@@ -405,6 +511,7 @@ export const Sidebar = ({ setSelectedListID }) => {
                                                 listID: list.id,
                                                 uid: sharedListOwner
                                              });
+                                             console.log(theme);
                                           }}
                                        >
                                           {list.title}

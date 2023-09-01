@@ -3,7 +3,7 @@ import { ref, push, set } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import { Auth } from '../firebase/Auth';
 
-export const CreateList = () => {
+export const CreateList = ({ theme }) => {
    const userInfo = Auth();
 
    const [listName, setListName] = useState('');
@@ -53,7 +53,13 @@ export const CreateList = () => {
          {userInfo && (
             <button
                onClick={toggleOverlay}
-               className="mb-4 border-none bg-[#70A9A1] p-2 rounded text-2xl text-[#F1FAEE] w-full"
+               className={`mb-4 border-none  p-2 rounded text-2xl  w-full ${
+                  theme == 'ocean'
+                     ? 'bg-[#70A9A1] text-[#f0e9d6]'
+                     : theme == 'light'
+                     ? 'bg-gray-800 text-[#f0e9d6]'
+                     : theme == 'dark' && 'bg-[#f0e9d6] text-gray-800'
+               }`}
             >
                Create List
             </button>
@@ -61,8 +67,24 @@ export const CreateList = () => {
 
          {showOverlay && userInfo && (
             <div className="fixed top-0 left-0 w-full h-full bg-[rgba(60,84,150,0.48)] flex justify-center items-center">
-               <div className={' bg-white rounded-xl p-10 w-full max-w-lg'}>
-                  <div className="popup ">
+               <div
+                  className={`  rounded-xl p-10 w-full max-w-lg ${
+                     theme == 'ocean'
+                        ? 'bg-[#1D3557] text-[#f0e9d6]'
+                        : theme == 'light'
+                        ? 'bg-[#f0e9d6]'
+                        : theme == 'dark' && 'bg-gray-800 text-[#f0e9d6]'
+                  }`}
+               >
+                  <div
+                     className={`${
+                        theme == 'ocean'
+                           ? 'bg-[#1D3557] text-[#f0e9d6]'
+                           : theme == 'light'
+                           ? 'bg-[#f0e9d6]'
+                           : theme == 'dark' && 'bg-gray-800 text-[#f0e9d6]'
+                     }`}
+                  >
                      <p className="text-center text-7xl font-black mb-6 ">
                         What is the list&apos;s name?
                      </p>
@@ -71,12 +93,19 @@ export const CreateList = () => {
                         placeholder="Shopping List"
                         value={listName}
                         onChange={(e) => setListName(e.target.value)}
-                        className="text-center w-full font-bold text-5xl mb-5"
+                        className="text-center w-full text-gray-800 font-bold text-5xl bg-[#f0e9d6] mb-5"
                      />
                      {error && <p className="text-red-500">{error}</p>}
                      <div className="flex">
                         <label
-                           className={` mx-2 bg-slate-200 rounded-2xl ${
+                           className={` mx-2 ${
+                              theme == 'ocean'
+                                 ? 'bg-[#70A9A1]'
+                                 : theme == 'light'
+                                 ? 'bg-gray-800 text-[#f0e9d6]'
+                                 : theme == 'dark' &&
+                                   'bg-[#f0e9d6] text-gray-800'
+                           } rounded-2xl ${
                               userInfo.isAnonymous ? 'w-full' : 'w-1/2'
                            }`}
                         >
@@ -105,7 +134,16 @@ export const CreateList = () => {
                            <p className="text-center text-3xl">Individual</p>
                         </label>
                         {!userInfo.isAnonymous && (
-                           <label className="w-1/2 mx-2 bg-slate-200 rounded-2xl">
+                           <label
+                              className={`w-1/2 mx-2  rounded-2xl ${
+                                 theme == 'ocean'
+                                    ? 'bg-[#70A9A1]'
+                                    : theme == 'light'
+                                    ? 'bg-gray-800 text-[#f0e9d6]'
+                                    : theme == 'dark' &&
+                                      'bg-[#f0e9d6] text-gray-800'
+                              }`}
+                           >
                               <input
                                  className="w-full"
                                  type="radio"
@@ -132,7 +170,7 @@ export const CreateList = () => {
                            </label>
                         )}
                      </div>
-                     {listType === 'group' && (
+                     {/* {listType === 'group' && (
                         <div className="mt-4">
                            <h3 className="text-lg font-semibold mb-2 text-center">
                               List Members (separate with comma):
@@ -168,17 +206,17 @@ export const CreateList = () => {
                               className="text-center w-full text-5xl mb-5"
                            />
                         </div>
-                     )}
+                     )} */}
 
                      <div className="flex mt-5">
                         <button
-                           className="bg-blue-600 text-white p-2 mx-2 font-semibold rounded text-4xl w-1/2"
+                           className="bg-blue-600 text-[#f0e9d6] p-2 mx-2 font-semibold rounded text-4xl w-1/2"
                            onClick={handleCreateList}
                         >
                            Create List
                         </button>
                         <button
-                           className="bg-blue-600 text-white p-2 text-4xl font-semibold mx-2 rounded w-1/2"
+                           className="bg-blue-600 text-[#f0e9d6] p-2 text-4xl font-semibold mx-2 rounded w-1/2"
                            onClick={toggleOverlay}
                         >
                            Close

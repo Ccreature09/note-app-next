@@ -5,6 +5,7 @@ import { Sidebar } from './components/Sidebar';
 import { Auth } from './firebase/Auth';
 import Image from 'next/image';
 import octupus from './images/octupus.png';
+import { Themes } from './components/Themes';
 
 export default function Home() {
    const [selectedListID, setSelectedListID] = useState({
@@ -17,6 +18,7 @@ export default function Home() {
 
    const [notificationPermission, setNotificationPermission] =
       useState('default');
+   const [theme, setTheme] = useState('ocean');
    const userInfo = Auth();
 
    useEffect(() => {
@@ -44,7 +46,10 @@ export default function Home() {
       <>
          <div className="flex flex-col md:flex-row bg-gradient-to-b from-[#A8DADC] to-[#1D3557] min-h-screen">
             <div>
-               <Sidebar setSelectedListID={memoizedSetSelectedListID} />
+               <Sidebar
+                  setSelectedListID={memoizedSetSelectedListID}
+                  theme={theme}
+               />
             </div>
 
             <div className="flex flex-col flex-grow max-w-xs h-auto mx-auto justify-center my-10">
@@ -56,9 +61,9 @@ export default function Home() {
                   className="w-32 h-32 mx-auto mb-5"
                   alt=""
                />
-
+               <Themes setTheme={setTheme}></Themes>
                <div className="flex justify-center md:items-center  w-full">
-                  {userInfo && <List listInfo={selectedListID} />}
+                  {userInfo && <List listInfo={selectedListID} theme={theme} />}
                </div>
             </div>
          </div>
