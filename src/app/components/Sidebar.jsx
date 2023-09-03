@@ -34,6 +34,7 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
    const [userPartOfLists, setUserPartOfLists] = useState([]);
    const [listCollapsed, setlistCollapsed] = useState(false);
    const [memberList, setMemberList] = useState(false);
+   const [removeSharedList, setRemoveSharedList] = useState(false);
    const [sharedListOwner, setSharedListOwner] = useState();
 
    useEffect(() => {
@@ -150,6 +151,31 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
       }
 
       remove(listRef);
+   };
+
+   const removeSharedListFromList = (listId, ownerUid) => {
+      const sharedListRef = ref(database, `users/${ownerUid}/lists/${listId}`);
+
+      onValue(sharedListRef, (snapshot) => {
+         if (snapshot.exists()) {
+            const listData = snapshot.val();
+
+            // Check if listData.members exists and is an array before filtering
+            if (Array.isArray(listData.members)) {
+               const updatedMembers = listData.members.filter(
+                  (memberEmail) => memberEmail !== email
+               );
+
+               // Update the shared list's members
+               update(sharedListRef, { members: updatedMembers });
+               setRemoveSharedList(false);
+            } else {
+               console.error('listData.members is not an array');
+            }
+         } else {
+            console.error('Shared list does not exist');
+         }
+      });
    };
 
    return (
@@ -394,7 +420,14 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                                        {list.type == 'group' &&
                                           selectedListID.listID == list.id && (
                                              <button
-                                                className="w-1/2 text-green-500 bg-[#1D3557] p-1.5 mb-3 rounded"
+                                                className={`w-1/2  ${
+                                                   theme == 'ocean'
+                                                      ? 'bg-[#1D3557] text-green-500 hover:bg-green-500 hover:text-white '
+                                                      : theme == 'light'
+                                                      ? 'bg-gray-800 text-green-500 hover:bg-green-500 hover:text-white'
+                                                      : theme == 'dark' &&
+                                                        'bg-[#f0e9d6] text-green-500  hover:bg-green-500 hover:text-white'
+                                                } p-1.5 mb-3 rounded`}
                                                 onClick={(e) => {
                                                    e.stopPropagation();
                                                    setMemberList(
@@ -408,7 +441,7 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                                                    viewBox="0 0 24 24"
                                                    strokeWidth={1.5}
                                                    stroke="currentColor"
-                                                   className=" h-9 item hover:bg-[#457B9D]  w-full p-2 rounded transition-all duration-200"
+                                                   className=" h-9 item   w-full p-2 rounded transition-all duration-200"
                                                 >
                                                    <path
                                                       strokeLinecap="round"
@@ -419,7 +452,14 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                                              </button>
                                           )}
                                        <button
-                                          className={` text-red-500 bg-[#1D3557] p-1.5 mb-3 rounded ${
+                                          className={`${
+                                             theme == 'ocean'
+                                                ? 'bg-[#1D3557] text-red-500 hover:bg-red-500 hover:text-white '
+                                                : theme == 'light'
+                                                ? 'bg-[#f0e9d6] text-red-500 hover:bg-red-500 hover:text-white'
+                                                : theme == 'dark' &&
+                                                  'bg-[#1e2124] text-red-500  hover:bg-red-500 hover:text-white'
+                                          } text-red-500  p-1.5 mb-3 rounded ${
                                              list.type == 'individual' ||
                                              selectedListID.listID != list.id
                                                 ? 'w-full'
@@ -434,7 +474,7 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                                              xmlns="http://www.w3.org/2000/svg"
                                              viewBox="0 0 24 24"
                                              fill="currentColor"
-                                             className="w-full h-9 item hover:bg-[#457B9D] p-2 rounded transition-all duration-200"
+                                             className="w-full h-9 item  p-2 rounded transition-all duration-200"
                                           >
                                              <path
                                                 fillRule="evenodd"
@@ -463,6 +503,36 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                            } `}
                         >
                            Shared Lists:
+                           <div className="flex items-center mt-4 w-full">
+                              <button
+                                 className={` p-1.5 w-full ml-2 rounded  ${
+                                    theme == 'ocean'
+                                       ? 'bg-[#1D3557] text-red-500 hover:bg-red-500 hover:text-white '
+                                       : theme == 'light'
+                                       ? 'bg-gray-800 text-red-500 hover:bg-red-500 hover:text-white'
+                                       : theme == 'dark' &&
+                                         'bg-[#f0e9d6] text-red-500  hover:bg-red-500 hover:text-white'
+                                 }`}
+                                 onClick={() => {
+                                    setRemoveSharedList(!removeSharedList);
+                                 }}
+                              >
+                                 <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-full h-6"
+                                 >
+                                    <path
+                                       strokeLinecap="round"
+                                       strokeLinejoin="round"
+                                       d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                                    />
+                                 </svg>
+                              </button>
+                           </div>
                         </p>
                         <hr
                            className={`${
@@ -474,6 +544,7 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                            }`}
                         />
                         <br />
+
                         <ul>
                            {userPartOfLists.map((list) => {
                               const userIsMember = list.members.includes(email);
@@ -516,6 +587,42 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
                                        >
                                           {list.title}
                                        </li>
+                                       {removeSharedList && (
+                                          <div className="flex items-center">
+                                             <button
+                                                className={`text-red-500 p-1.5 ml-2 rounded ${
+                                                   theme == 'ocean'
+                                                      ? 'bg-[#1D3557] text-red-500 hover:bg-red-500 hover:text-white '
+                                                      : theme == 'light'
+                                                      ? 'bg-gray-800 text-red-500 hover:bg-red-500 hover:text-white'
+                                                      : theme == 'dark' &&
+                                                        'bg-[#f0e9d6] text-red-500  hover:bg-red-500 hover:text-white'
+                                                }`}
+                                                onClick={(e) => {
+                                                   e.stopPropagation();
+                                                   removeSharedListFromList(
+                                                      list.id,
+                                                      sharedListOwner
+                                                   );
+                                                }}
+                                             >
+                                                <svg
+                                                   xmlns="http://www.w3.org/2000/svg"
+                                                   fill="none"
+                                                   viewBox="0 0 24 24"
+                                                   strokeWidth={1.5}
+                                                   stroke="currentColor"
+                                                   className="w-6 h-6"
+                                                >
+                                                   <path
+                                                      strokeLinecap="round"
+                                                      strokeLinejoin="round"
+                                                      d="M6 18L18 6M6 6l12 12"
+                                                   />
+                                                </svg>
+                                             </button>
+                                          </div>
+                                       )}
                                     </div>
                                  );
                               }

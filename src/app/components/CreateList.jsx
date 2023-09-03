@@ -93,7 +93,7 @@ export const CreateList = ({ theme }) => {
                         placeholder="Shopping List"
                         value={listName}
                         onChange={(e) => setListName(e.target.value)}
-                        className="text-center w-full text-gray-800 font-bold text-5xl bg-[#f0e9d6] mb-5"
+                        className="text-center rounded-lg w-full text-gray-800 font-bold text-5xl bg-[#f0e9d6] mb-5"
                      />
                      {error && <p className="text-red-500">{error}</p>}
                      <div className="flex">
