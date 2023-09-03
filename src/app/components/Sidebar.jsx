@@ -5,6 +5,7 @@ import { database } from '../firebase/firebase';
 import { Poiret_One } from 'next/font/google';
 import { Monoton } from 'next/font/google';
 import Image from 'next/image';
+import { Themes } from './Themes';
 
 import { CreateList } from './CreateList';
 import { MemberList } from './MemberList';
@@ -20,7 +21,7 @@ const monoton = Monoton({
    variable: '--font-monoton'
 });
 
-export const Sidebar = ({ setSelectedListID, theme }) => {
+export const Sidebar = ({ setSelectedListID, theme, setSettings }) => {
    const userInfo = Auth();
 
    const isAnonymous = userInfo && userInfo.isAnonymous;
@@ -34,6 +35,8 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
    const [userPartOfLists, setUserPartOfLists] = useState([]);
    const [listCollapsed, setlistCollapsed] = useState(false);
    const [memberList, setMemberList] = useState(false);
+   const [showSettingsOverlay, setShowSettingsOverlay] = useState(false);
+
    const [removeSharedList, setRemoveSharedList] = useState(false);
    const [sharedListOwner, setSharedListOwner] = useState();
 
@@ -236,7 +239,17 @@ export const Sidebar = ({ setSelectedListID, theme }) => {
          )}
 
          {userInfo && !isAnonymous && (
-            <div className="flex items-center justify-center space-x-4 mb-6">
+            <div
+               className="flex items-center justify-center space-x-4 mb-6"
+               onClick={() => {
+                  setSettings(true);
+                  setShowSettingsOverlay(!showSettingsOverlay);
+                  if (showSettingsOverlay) {
+                     setSettings(false);
+                     setShowSettingsOverlay(false);
+                  }
+               }}
+            >
                <Image
                   className="rounded-full"
                   src={img}

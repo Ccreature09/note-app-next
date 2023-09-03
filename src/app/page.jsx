@@ -19,6 +19,7 @@ export default function Home() {
    const [notificationPermission, setNotificationPermission] =
       useState('default');
    const [theme, setTheme] = useState('ocean');
+   const [settings, setSettings] = useState(false);
    const userInfo = Auth();
 
    useEffect(() => {
@@ -57,6 +58,7 @@ export default function Home() {
                <Sidebar
                   setSelectedListID={memoizedSetSelectedListID}
                   theme={theme}
+                  setSettings={setSettings}
                />
             </div>
 
@@ -69,7 +71,8 @@ export default function Home() {
                   className="w-32 h-32 mx-auto mb-5"
                   alt=""
                />
-               <Themes setTheme={setTheme}></Themes>
+               {settings && <Themes setTheme={setTheme}></Themes>}
+
                <div className="flex justify-center md:items-center  w-full">
                   {userInfo && <List listInfo={selectedListID} theme={theme} />}
                </div>
