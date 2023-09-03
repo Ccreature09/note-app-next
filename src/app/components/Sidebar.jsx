@@ -399,15 +399,15 @@ export const Sidebar = ({ setSelectedListID, theme, setSettings }) => {
                                  key={list.id}
                               >
                                  <li
-                                    className={`transition-all duration-200 cursor-pointer w-full text-2xl font-black p-3 rounded-lg text-center text-[#F1FAEE] overflow-auto ${
+                                    className={`transition-all duration-200 cursor-pointer w-full text-2xl font-black p-3 rounded-lg text-center  overflow-auto ${
                                        theme === 'ocean'
                                           ? activeListItem === list.id
-                                             ? 'bg-[#457B9D]'
-                                             : 'bg-[#1D3557] hover:bg-[#457B9D]'
+                                             ? 'bg-green-400'
+                                             : 'bg-[#457B9D] hover:bg-green-400 text-[#F1FAEE]'
                                           : theme === 'light'
                                           ? activeListItem === list.id
                                              ? 'bg-green-400'
-                                             : 'bg-gray-800 hover:bg-green-400'
+                                             : 'bg-[#1e2124] hover:bg-green-400 text-[#F1FAEE]'
                                           : theme === 'dark'
                                           ? activeListItem === list.id
                                              ? 'bg-green-400 text-[#f0e9d6]'
