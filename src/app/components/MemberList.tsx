@@ -4,12 +4,8 @@ import { ref, onValue, get, set } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import Image from 'next/image';
 
-type ListInfo = {
-   listID: string;
-   uid: string;
-};
 type FCProps = {
-   selectedList: {
+   selectedList?: {
       listID: string;
       uid: string;
    };
@@ -41,7 +37,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
 
       const listRef = ref(
          database,
-         `users/${userInfo?.uid}/lists/${selectedList.listID}/members`
+         `users/${userInfo?.uid}/lists/${selectedList?.listID}/members`
       );
 
       const listMembersSnapshot = await get(listRef);
@@ -64,7 +60,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
 
       const listRef = ref(
          database,
-         `users/${userInfo?.uid}/lists/${selectedList.listID}/members`
+         `users/${userInfo?.uid}/lists/${selectedList?.listID}/members`
       );
 
       const listMembersSnapshot = await get(listRef);
@@ -94,7 +90,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
 
                const listMembersRef = ref(
                   database,
-                  `users/${selectedList.uid}/lists/${selectedList.listID}/members`
+                  `users/${selectedList?.uid}/lists/${selectedList?.listID}/members`
                );
                const listMembersSnapshot = await get(listMembersRef);
                const listMembers = listMembersSnapshot.val() || [];

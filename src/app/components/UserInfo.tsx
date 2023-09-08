@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Auth } from '../firebase/Auth';
+import { Poiret_One } from 'next/font/google';
 
 import Image from 'next/image';
 
@@ -13,6 +14,11 @@ type UserInfo = {
    isAnonymous: boolean;
    photoURL: string;
 };
+const poiret_One = Poiret_One({
+   subsets: ['latin'],
+   weight: '400',
+   variable: '--font-poiret'
+});
 
 export const UserInfo: React.FC<FCProps> = ({ setSettings, theme }) => {
    const userInfo = Auth() as UserInfo | null;
@@ -62,7 +68,9 @@ export const UserInfo: React.FC<FCProps> = ({ setSettings, theme }) => {
                />
                <div className="flex flex-col">
                   <p
-                     className={`text-[#F1FAEE] font-black text-2xl ${
+                     className={`text-[#F1FAEE] font-black text-2xl font-sans ${
+                        poiret_One.variable
+                     } ${
                         theme == 'ocean'
                            ? 'text-[#f0e9d6]'
                            : theme == 'light'
@@ -73,7 +81,9 @@ export const UserInfo: React.FC<FCProps> = ({ setSettings, theme }) => {
                      {userInfo.displayName}
                   </p>
                   <p
-                     className={`text-[#F1FAEE] text-base truncate md:w-auto ${
+                     className={`text-[#F1FAEE] text-base truncate md:w-auto font-sans ${
+                        poiret_One.variable
+                     } ${
                         theme == 'ocean'
                            ? 'text-[#f0e9d6]'
                            : theme == 'light'

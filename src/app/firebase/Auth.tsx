@@ -8,6 +8,7 @@ import {
    signInAnonymously,
    User
 } from 'firebase/auth';
+import { Poiret_One } from 'next/font/google';
 
 type UserInfo = {
    displayName?: string;
@@ -16,6 +17,12 @@ type UserInfo = {
    uid?: string;
    isAnonymous?: boolean;
 };
+
+const poiret_One = Poiret_One({
+   subsets: ['latin'],
+   weight: '400',
+   variable: '--font-poiret'
+});
 
 export const GoogleAuthButton: React.FC = () => {
    const userInfo = Auth();
@@ -39,9 +46,9 @@ export const GoogleAuthButton: React.FC = () => {
 
    return (
       <button
-         className={`mb-4 border-none  p-2 text-2xl rounded  text-[#F1FAEE] ${
-            userInfo ? 'bg-red-500' : 'bg-green-500'
-         }`}
+         className={`mb-4 border-none  p-2 text-2xl rounded font-sans  text-[#F1FAEE] ${
+            poiret_One.variable
+         } ${userInfo ? 'bg-red-500' : 'bg-green-500'}`}
          onClick={handleAuthClick}
       >
          {userInfo ? 'Sign Out' : 'Sign In with Google'}
@@ -73,7 +80,7 @@ export const GuestAuthButton: React.FC = () => {
 
    return (
       <button
-         className="mb-4 border-none bg-gray-500 p-2 rounded text-2xl text-[#F1FAEE]"
+         className={`mb-4 border-none bg-gray-500 p-2 rounded text-2xl ${poiret_One.variable} font-sans text-[#F1FAEE]`}
          onClick={handleAuthClick}
       >
          {guestInfo ? 'Sign Out' : 'Sign In as Guest'}
