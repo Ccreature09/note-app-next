@@ -4,10 +4,10 @@ import { ref, remove, onValue, update } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import { Poiret_One } from 'next/font/google';
 import { Monoton } from 'next/font/google';
-import Image from 'next/image';
 
 import { CreateList } from './CreateList';
 import { MemberList } from './MemberList';
+import { UserInfo } from './UserInfo';
 
 const poiret_One = Poiret_One({
    subsets: ['latin'],
@@ -23,9 +23,6 @@ const monoton = Monoton({
 export const Sidebar = ({ setSelectedListID, theme, setSettings }) => {
    const userInfo = Auth();
 
-   const isAnonymous = userInfo && userInfo.isAnonymous;
-   const img = userInfo && userInfo.photoURL;
-   const name = userInfo && userInfo.displayName;
    const email = userInfo && userInfo.email;
 
    const [activeListItem, setActiveListItem] = useState('');
@@ -34,7 +31,6 @@ export const Sidebar = ({ setSelectedListID, theme, setSettings }) => {
    const [userPartOfLists, setUserPartOfLists] = useState([]);
    const [listCollapsed, setlistCollapsed] = useState(false);
    const [memberList, setMemberList] = useState(false);
-   const [showSettingsOverlay, setShowSettingsOverlay] = useState(false);
 
    const [removeSharedList, setRemoveSharedList] = useState(false);
    const [sharedListOwner, setSharedListOwner] = useState();
@@ -190,9 +186,7 @@ export const Sidebar = ({ setSelectedListID, theme, setSettings }) => {
                : theme === 'dark'
                ? 'bg-[#1e2124]'
                : ''
-         } md:h-screen w-full md:w-64 ${
-            poiret_One.variable
-         } transition-all duration-200 font-sans`}
+         } md:h-screen w-full md:w-64 transition-all duration-200 font-sans`}
       >
          <h1
             className={` ${monoton.variable} ${
@@ -216,72 +210,8 @@ export const Sidebar = ({ setSelectedListID, theme, setSettings }) => {
             }`}
          />
          <br />
-         {userInfo && isAnonymous && (
-            <svg
-               width="100px"
-               height="100px"
-               viewBox="0 0 16 16"
-               className="p-3 w-auto mb-3"
-               xmlns="http://www.w3.org/2000/svg"
-            >
-               <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M5.371 1.072a1 1 0 00-1.32.612L2.28 7H1a1 1 0 000 2h14a1 1 0 100-2h-1.28l-1.77-5.316a1 1 0 00-1.32-.612L8 2.123 5.371 1.072zM11.613 7l-1.226-3.678-2.016.806a1 1 0 01-.742 0l-2.016-.806L4.387 7h7.226z"
-                  fill="#000000"
-               />
-               <path
-                  d="M2 11a1 1 0 100 2c.552 0 .98.475 1.244.959A2 2 0 005 15h.558a2 2 0 001.898-1.367l.105-.317a.463.463 0 01.878 0l.105.316A2 2 0 0010.441 15H11a2 2 0 001.755-1.041c.266-.484.693-.959 1.245-.959a1 1 0 100-2H2z"
-                  fill="#000000"
-               />
-            </svg>
-         )}
 
-         {userInfo && !isAnonymous && (
-            <div
-               className="flex items-center justify-center space-x-4 mb-6"
-               onClick={() => {
-                  setSettings(true);
-                  setShowSettingsOverlay(!showSettingsOverlay);
-                  if (showSettingsOverlay) {
-                     setSettings(false);
-                     setShowSettingsOverlay(false);
-                  }
-               }}
-            >
-               <Image
-                  className="rounded-full"
-                  src={img}
-                  width={64}
-                  height={64}
-                  alt="Picture of the author"
-               />
-               <div className="flex flex-col">
-                  <p
-                     className={`text-[#F1FAEE] font-black text-2xl ${
-                        theme == 'ocean'
-                           ? 'text-[#f0e9d6]'
-                           : theme == 'light'
-                           ? 'text-gray-800'
-                           : theme == 'dark' && 'text-[#f0e9d6]'
-                     } `}
-                  >
-                     {name}
-                  </p>
-                  <p
-                     className={`text-[#F1FAEE] text-base truncate md:w-auto ${
-                        theme == 'ocean'
-                           ? 'text-[#f0e9d6]'
-                           : theme == 'light'
-                           ? 'text-gray-800'
-                           : theme == 'dark' && 'text-[#f0e9d6]'
-                     }`}
-                  >
-                     {email}
-                  </p>
-               </div>
-            </div>
-         )}
+         <UserInfo setSettings={setSettings}></UserInfo>
 
          {!userInfo ? (
             <>
