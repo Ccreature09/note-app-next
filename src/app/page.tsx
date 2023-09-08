@@ -7,14 +7,19 @@ import Image from 'next/image';
 import octupus from './images/octupus.png';
 import { Themes } from './components/Themes';
 
+type ListInfo = {
+   listID: string;
+   uid: string;
+};
+
 export default function Home() {
-   const [selectedListID, setSelectedListID] = useState({
-      listID: '',
-      uid: ''
-   });
-   const memoizedSetSelectedListID = useCallback((newSelectedListID) => {
-      setSelectedListID(newSelectedListID);
-   }, []);
+   const [selectedListID, setSelectedListID] = useState<ListInfo>();
+   const memoizedSetSelectedListID = useCallback(
+      (newSelectedListID: ListInfo) => {
+         setSelectedListID(newSelectedListID);
+      },
+      []
+   );
 
    const [notificationPermission, setNotificationPermission] =
       useState('default');
@@ -67,14 +72,16 @@ export default function Home() {
                   width={160}
                   height={160}
                   src={octupus}
-                  priority="true"
+                  priority={true}
                   className="w-32 h-32 mx-auto mb-5"
                   alt=""
                />
                {settings && <Themes setTheme={setTheme}></Themes>}
 
                <div className="flex justify-center md:items-center  w-full">
-                  {userInfo && <List listInfo={selectedListID} theme={theme} />}
+                  {selectedListID && userInfo && (
+                     <List ListInfo={selectedListID} theme={theme} />
+                  )}
                </div>
             </div>
          </div>
