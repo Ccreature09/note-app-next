@@ -1,6 +1,9 @@
 import { useState } from 'react';
 
-export const Themes = ({ setTheme }) => {
+type FCProps = {
+   setTheme: (theme: string) => void;
+};
+export const Themes: React.FC<FCProps> = ({ setTheme }) => {
    const [dropdown, setDropdown] = useState(false);
 
    return (

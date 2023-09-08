@@ -4,14 +4,36 @@ import { ref, onValue, get, set } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import Image from 'next/image';
 
-export const MemberList = ({ selectedList }) => {
-   const userInfo = Auth();
-   const [members, setMembers] = useState([]);
-   const [users, setUsers] = useState([]);
+type ListInfo = {
+   listID: string;
+   uid: string;
+};
+type FCProps = {
+   selectedList: {
+      listID: string;
+      uid: string;
+   };
+};
+
+type User = {
+   name: string;
+   photoURL: string;
+   uid: string;
+   email: string;
+};
+type UserInfo = {
+   isAnonymous: boolean;
+   uid: string;
+};
+
+export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
+   const userInfo = Auth() as UserInfo | null;
+   const [members, setMembers] = useState<User[]>([]);
+   const [users, setUsers] = useState<User[]>([]);
    const [addUser, setAddUser] = useState(false);
    const [removeUser, setRemoveUser] = useState(false);
 
-   const addUserToList = async (user) => {
+   const addUserToList = async (user: User) => {
       if (!user || !user.email) {
          console.error('Invalid user object or missing email.');
          return;
@@ -19,7 +41,7 @@ export const MemberList = ({ selectedList }) => {
 
       const listRef = ref(
          database,
-         `users/${userInfo.uid}/lists/${selectedList.listID}/members`
+         `users/${userInfo?.uid}/lists/${selectedList.listID}/members`
       );
 
       const listMembersSnapshot = await get(listRef);
@@ -34,7 +56,7 @@ export const MemberList = ({ selectedList }) => {
          setMembers(updatedMembers);
       }
    };
-   const removeUserFromList = async (user) => {
+   const removeUserFromList = async (user: User) => {
       if (!user || !user.email) {
          console.error('Invalid user object or missing email.');
          return;
@@ -42,7 +64,7 @@ export const MemberList = ({ selectedList }) => {
 
       const listRef = ref(
          database,
-         `users/${userInfo.uid}/lists/${selectedList.listID}/members`
+         `users/${userInfo?.uid}/lists/${selectedList.listID}/members`
       );
 
       const listMembersSnapshot = await get(listRef);
@@ -50,7 +72,7 @@ export const MemberList = ({ selectedList }) => {
 
       if (listMembers.includes(user.email)) {
          const updatedListMembers = listMembers.filter(
-            (email) => email !== user.email
+            (email: string) => email !== user.email
          );
 
          await set(listRef, updatedListMembers);
@@ -68,7 +90,7 @@ export const MemberList = ({ selectedList }) => {
          onValue(usersRef, async (snapshot) => {
             if (snapshot.exists()) {
                const users = snapshot.val();
-               const usersList = [];
+               const usersList: User[] = [];
 
                const listMembersRef = ref(
                   database,
@@ -231,14 +253,13 @@ export const MemberList = ({ selectedList }) => {
                               d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
                            />
                         </svg>
-                        <p></p>
                      </button>
                   </div>
                   <br />
 
                   {addUser && users && (
                      <ul>
-                        {users.map((user) => (
+                        {users.map((user: User) => (
                            <li
                               key={user.uid}
                               className="flex items-center p-2 space-x-4 hover:bg-green-400 rounded-lg cursor-pointer"
@@ -264,7 +285,7 @@ export const MemberList = ({ selectedList }) => {
 
                   {!addUser && !removeUser && members && (
                      <ul>
-                        {members.map((user) => (
+                        {members.map((user: User) => (
                            <li
                               key={user.uid}
                               className="flex items-center p-2 space-x-4  hover:bg-blue-400 rounded-lg"
@@ -290,7 +311,7 @@ export const MemberList = ({ selectedList }) => {
 
                   {removeUser && members && (
                      <ul>
-                        {members.map((user) => (
+                        {members.map((user: User) => (
                            <li
                               key={user.uid}
                               onClick={() => removeUserFromList(user)}
