@@ -19,12 +19,13 @@ type UserInfo = {
    isAnonymous: boolean;
    uid: string;
 };
-type ListItem = {
+interface ListItem {
+   id: string;
    name: string;
    time?: number;
    formattedTime?: string;
    notified?: boolean;
-};
+}
 
 export const List: React.FC<FCProps> = ({ ListInfo, theme }) => {
    const userInfo = Auth() as UserInfo | null;
@@ -117,8 +118,18 @@ export const List: React.FC<FCProps> = ({ ListInfo, theme }) => {
       );
       onValue(listRef, (snapshot) => {
          if (snapshot.exists()) {
-            const listData = snapshot.val();
-            const itemList = Object.entries(listData);
+            const listData: Record<string, ListItem> = snapshot.val();
+            // Convert the Firebase data to an array of ListItems
+            const itemList: ListItem[] = Object.keys(listData).map((key) => {
+               const item = listData[key];
+               return {
+                  id: key,
+                  name: item.name || '', // Use default value if not present
+                  formattedTime: item.formattedTime || '', // If needed, use default value
+                  notified: item.notified || false, // If needed, use a default value
+                  time: item.time || 0 // If needed, use a default value
+               };
+            });
             setItems(itemList);
          } else {
             setItems([]);
@@ -209,7 +220,10 @@ export const List: React.FC<FCProps> = ({ ListInfo, theme }) => {
                   {items.map((item: ListItem, index: number) => (
                      <li
                         key={index}
-                        onClick={() => removeItem(item.name)}
+                        onClick={() => {
+                           console.log(item); // Add this line to log the item properties
+                           removeItem(item.id);
+                        }}
                         className={`hover:bg-[#E63946] transition-all duration-200 cursor-pointer text-xl  p-4 rounded-lg flex-grow text-center ${
                            theme === 'ocean'
                               ? 'bg-[#70A9A1] text-[#f0e9d6]'
