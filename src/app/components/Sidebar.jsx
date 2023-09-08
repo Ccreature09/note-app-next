@@ -5,7 +5,6 @@ import { database } from '../firebase/firebase';
 import { Poiret_One } from 'next/font/google';
 import { Monoton } from 'next/font/google';
 import Image from 'next/image';
-import { Themes } from './Themes';
 
 import { CreateList } from './CreateList';
 import { MemberList } from './MemberList';

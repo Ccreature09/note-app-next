@@ -1,4 +1,3 @@
-'use client';
 import React, { useEffect, useState } from 'react';
 import { auth } from './firebase';
 import {
@@ -6,13 +5,22 @@ import {
    signInWithPopup,
    onAuthStateChanged,
    signOut,
-   signInAnonymously
+   signInAnonymously,
+   User
 } from 'firebase/auth';
 
-export const GoogleAuthButton = () => {
+type UserInfo = {
+   displayName?: string;
+   email?: string | null; // Change the type to string | null
+   photoURL?: string;
+   uid?: string;
+   isAnonymous?: boolean;
+};
+
+export const GoogleAuthButton: React.FC = () => {
    const userInfo = Auth();
 
-   const handleAuthClick = async (e) => {
+   const handleAuthClick = async () => {
       if (userInfo) {
          try {
             await signOut(auth);
@@ -21,7 +29,7 @@ export const GoogleAuthButton = () => {
          }
       } else {
          try {
-            const provider = await new GoogleAuthProvider();
+            const provider = new GoogleAuthProvider();
             await signInWithPopup(auth, provider);
          } catch (error) {
             console.error('Error signing in:', error);
@@ -41,15 +49,14 @@ export const GoogleAuthButton = () => {
    );
 };
 
-export const GuestAuthButton = () => {
+export const GuestAuthButton: React.FC = () => {
    const guestInfo = Auth();
 
-   const handleAuthClick = async (e) => {
+   const handleAuthClick = async () => {
       if (guestInfo) {
          try {
             if (guestInfo.isAnonymous) {
-               // Delete the anonymous account before signing out
-               await auth.currentUser.delete();
+               await auth.currentUser?.delete();
             }
             await signOut(auth);
          } catch (error) {
@@ -75,10 +82,10 @@ export const GuestAuthButton = () => {
 };
 
 export const Auth = () => {
-   const [userInfo, setUserInfo] = useState(null);
+   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
          if (user) {
             const uid = user.uid;
             const isAnonymous = user.isAnonymous;
@@ -86,9 +93,9 @@ export const Auth = () => {
             if (isAnonymous) {
                setUserInfo({ uid, isAnonymous });
             } else {
-               const displayName = user.displayName;
-               const email = user.email;
-               const photoURL = user.photoURL;
+               const displayName = user.displayName || '';
+               const email = user.email || '';
+               const photoURL = user.photoURL || '';
                setUserInfo({ displayName, email, photoURL, uid, isAnonymous });
             }
          } else {
