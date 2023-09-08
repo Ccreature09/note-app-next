@@ -5,29 +5,51 @@ import { onValue, ref, push, remove } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import { Auth } from '../firebase/Auth';
 
-export const List = ({ listInfo, theme }) => {
-   const userInfo = Auth();
-   const isAnonymous = userInfo && userInfo.isAnonymous;
+interface ListInfo {
+   listID: string;
+   uid: string;
+}
+
+type FCProps = {
+   ListInfo: ListInfo;
+   theme: string;
+};
+
+type UserInfo = {
+   isAnonymous: boolean;
+   uid: string;
+};
+type ListItem = {
+   name: string;
+   time?: number;
+   formattedTime?: string;
+   notified?: boolean;
+};
+
+export const List: React.FC<FCProps> = ({ ListInfo, theme }) => {
+   const userInfo = Auth() as UserInfo | null;
+
    const listID =
-      listInfo && listInfo.listID
-         ? JSON.stringify(listInfo.listID).replace(/['"]+/g, '')
+      ListInfo && ListInfo.listID
+         ? JSON.stringify(ListInfo.listID).replace(/['"]+/g, '')
          : '';
    const listUID =
-      listInfo && listInfo.uid
-         ? JSON.stringify(listInfo.uid).replace(/['"]+/g, '')
+      ListInfo && ListInfo.uid
+         ? JSON.stringify(ListInfo.uid).replace(/['"]+/g, '')
          : '';
 
    const [inputValue, setInputValue] = useState('');
    const [error, setError] = useState('');
    const [reminderTime, setReminderTime] = useState('');
-   const [items, setItems] = useState([]);
+   const [items, setItems] = useState<ListItem[]>([]);
+
    const [reminder, setReminder] = useState(false);
 
    const addItem = () => {
       const ListInDB = ref(
          database,
          `${
-            userInfo.isAnonymous ? 'guests' : 'users'
+            userInfo?.isAnonymous ? 'guests' : 'users'
          }/${listUID}/lists/${listID}/items`
       );
       if (inputValue.trim() === '') {
@@ -66,7 +88,7 @@ export const List = ({ listInfo, theme }) => {
       setReminder(false);
    };
 
-   const handleKeyPress = (e) => {
+   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
          addItem();
       }
@@ -76,11 +98,11 @@ export const List = ({ listInfo, theme }) => {
       setError('');
    };
 
-   const removeItem = (itemId) => {
+   const removeItem = (itemId: string) => {
       const exactLocationOfItemInDB = ref(
          database,
          `${
-            isAnonymous ? 'guests' : 'users'
+            userInfo?.isAnonymous ? 'guests' : 'users'
          }/${listUID}/lists/${listID}/items/${itemId}`
       );
       remove(exactLocationOfItemInDB);
@@ -89,7 +111,9 @@ export const List = ({ listInfo, theme }) => {
    useEffect(() => {
       const listRef = ref(
          database,
-         `${isAnonymous ? 'guests' : 'users'}/${listUID}/lists/${listID}/items`
+         `${
+            userInfo?.isAnonymous ? 'guests' : 'users'
+         }/${listUID}/lists/${listID}/items`
       );
       onValue(listRef, (snapshot) => {
          if (snapshot.exists()) {
@@ -100,7 +124,7 @@ export const List = ({ listInfo, theme }) => {
             setItems([]);
          }
       });
-   }, [isAnonymous, listID, listUID]);
+   }, [listID, listUID, userInfo?.isAnonymous]);
 
    return (
       <>
@@ -161,7 +185,6 @@ export const List = ({ listInfo, theme }) => {
                         type="datetime-local"
                         value={reminderTime}
                         onChange={(e) => setReminderTime(e.target.value)}
-                        size="100"
                         className=" text-lg text-center m-auto  rounded mb-4 "
                      />
                   </div>
@@ -183,16 +206,17 @@ export const List = ({ listInfo, theme }) => {
                   <p>Add to List</p>
                </button>
                <ul className="list-none flex flex-wrap gap-3">
-                  {items.map(([itemId, item]) => (
+                  {items.map((item: ListItem, index: number) => (
                      <li
-                        key={itemId}
-                        onClick={() => removeItem(itemId)}
+                        key={index}
+                        onClick={() => removeItem(item.name)}
                         className={`hover:bg-[#E63946] transition-all duration-200 cursor-pointer text-xl  p-4 rounded-lg flex-grow text-center ${
-                           theme == 'ocean'
+                           theme === 'ocean'
                               ? 'bg-[#70A9A1] text-[#f0e9d6]'
-                              : theme == 'light'
+                              : theme === 'light'
                               ? 'bg-[#f0e9d6] text-[#1e2124]'
-                              : theme == 'dark' && 'bg-[#1e2124] text-[#f0e9d6]'
+                              : theme === 'dark' &&
+                                'bg-[#1e2124] text-[#f0e9d6]'
                         }`}
                      >
                         <div>{item.name}</div>

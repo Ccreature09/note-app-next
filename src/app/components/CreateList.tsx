@@ -3,14 +3,22 @@ import { ref, push, set } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import { Auth } from '../firebase/Auth';
 
-export const CreateList = ({ theme }) => {
-   const userInfo = Auth();
+type FCProps = {
+   theme: string;
+};
+type UserInfo = {
+   isAnonymous: boolean;
+   uid: string;
+};
 
-   const [listName, setListName] = useState('');
-   const [error, setError] = useState('');
+export const CreateList: React.FC<FCProps> = ({ theme }) => {
+   const userInfo = Auth() as UserInfo | null;
+
+   const [listName, setListName] = useState<string>('');
+   const [error, setError] = useState<string>('');
    const [listType, setListType] = useState('individual');
    const [showOverlay, setShowOverlay] = useState(false);
-   const [listMembers, setListMembers] = useState([]);
+   const [listMembers, setListMembers] = useState<string[]>([]);
 
    const toggleOverlay = () => {
       setListType('individual');
@@ -34,11 +42,10 @@ export const CreateList = ({ theme }) => {
 
       const listsRef = ref(
          database,
-         `${userInfo.isAnonymous ? 'guests' : 'users'}/${userInfo.uid}/lists`
+         `${userInfo?.isAnonymous ? 'guests' : 'users'}/${userInfo?.uid}/lists`
       );
-
       const listRef = push(listsRef);
-      newList.id = listRef.key;
+      newList.id = listRef.key as string;
 
       set(listRef, newList);
 
