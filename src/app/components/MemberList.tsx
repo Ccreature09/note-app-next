@@ -3,6 +3,7 @@ import { Auth } from '../firebase/Auth';
 import { ref, onValue, get, set } from 'firebase/database';
 import { database } from '../firebase/firebase';
 import Image from 'next/image';
+import { Poiret_One } from 'next/font/google';
 
 type FCProps = {
    selectedList?: {
@@ -10,6 +11,12 @@ type FCProps = {
       uid: string;
    };
 };
+
+const poiret_One = Poiret_One({
+   subsets: ['latin'],
+   weight: '400',
+   variable: '--font-poiret'
+});
 
 type User = {
    name: string;
@@ -181,7 +188,11 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                }   rounded-xl p-10 w-full max-w-lg`}
             >
                <div className="popup ">
-                  <p className="text-5xl mb-2 text-center">Members:</p>
+                  <p
+                     className={`text-5xl mb-2 text-center font-sans ${poiret_One.variable}`}
+                  >
+                     Members:
+                  </p>
                   <hr className="mb-3" />
                   <div className="flex gap-2">
                      <button
@@ -272,7 +283,11 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                               )}
 
                               {user.uid && (
-                                 <p className="text-2xl">{user.name}</p>
+                                 <p
+                                    className={`${poiret_One.variable} font-sans text-2xl`}
+                                 >
+                                    {user.name}
+                                 </p>
                               )}
                            </li>
                         ))}
@@ -284,7 +299,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                         {members.map((user: User) => (
                            <li
                               key={user.uid}
-                              className="flex items-center p-2 space-x-4  hover:bg-blue-400 rounded-lg"
+                              className={`flex items-center p-2 space-x-4  hover:bg-blue-400 rounded-lg ${poiret_One.variable} font-sans`}
                            >
                               {user.photoURL && (
                                  <Image
@@ -297,11 +312,19 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                               )}
 
                               {user.uid && (
-                                 <p className="text-2xl">{user.name}</p>
+                                 <p
+                                    className={`text-2xl ${poiret_One.variable} font-sans`}
+                                 >
+                                    {user.name}
+                                 </p>
                               )}
                            </li>
                         ))}
-                        {members.length == 0 && <li>No members yet...</li>}
+                        {members.length == 0 && (
+                           <li className={`${poiret_One.variable} font-sans`}>
+                              No members yet...
+                           </li>
+                        )}
                      </ul>
                   )}
 
@@ -311,7 +334,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                            <li
                               key={user.uid}
                               onClick={() => removeUserFromList(user)}
-                              className="flex items-center p-2 space-x-4 hover:bg-red-400 rounded-lg cursor-pointer"
+                              className={`flex items-center p-2 space-x-4 hover:bg-red-400 rounded-lg cursor-pointer ${poiret_One.variable} font-sans`}
                            >
                               {user.photoURL && (
                                  <Image
@@ -323,11 +346,17 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                                  />
                               )}
 
-                              <p className="text-2xl">{user.name}</p>
+                              <p
+                                 className={`${poiret_One.variable} font-sans text-2xl`}
+                              >
+                                 {user.name}
+                              </p>
                            </li>
                         ))}
                         {members.length == 0 && (
-                           <li>No members to remove...</li>
+                           <li className={`${poiret_One.variable} font-sans`}>
+                              No members to remove...
+                           </li>
                         )}
                      </ul>
                   )}
