@@ -187,7 +187,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                      : ''
                }   rounded-xl p-10 w-full max-w-lg`}
             >
-               <div className="popup ">
+               <div className="popup  ">
                   <p
                      className={`text-5xl mb-2 text-center font-sans ${poiret_One.variable}`}
                   >
@@ -265,7 +265,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                   <br />
 
                   {addUser && users && (
-                     <ul>
+                     <ul className="max-h-96 overflow-y-auto">
                         {users.map((user: User) => (
                            <li
                               key={user.uid}
@@ -295,7 +295,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                   )}
 
                   {!addUser && !removeUser && members && (
-                     <ul>
+                     <ul className="max-h-96 overflow-y-auto">
                         {members.map((user: User) => (
                            <li
                               key={user.uid}
@@ -329,7 +329,7 @@ export const MemberList: React.FC<FCProps> = ({ selectedList }) => {
                   )}
 
                   {removeUser && members && (
-                     <ul>
+                     <ul className="max-h-96 overflow-y-auto">
                         {members.map((user: User) => (
                            <li
                               key={user.uid}
