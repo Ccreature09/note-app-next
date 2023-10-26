@@ -1,38 +1,38 @@
 {
-	"name": "Octonotes",
-	"short_name": "Octo!",
-	"theme_color": "#000000",
-	"background_color": "#14A6EF",
-	"display": "standalone",
-	"orientation": "portrait",
-	"scope": "/",
-	"start_url": "/",
-	"icons": [
-		{
-			"src": "octo192.png",
-			"sizes": "192x192",
-			"type": "image/png"
-		},
-		{
-			"src": "octo256.png",
-			"sizes": "256x256",
-			"type": "image/png"
-		},
-		{
-			"src": "octo384.png",
-			"sizes": "384x384",
-			"type": "image/png"
-		},
-		{
-			"src": "/octo512.png",
-			"sizes": "512x512",
-			"type": "image/png"
-		},
-		{
-			"src": "/octo384.png",
-			"sizes": "384x384",
-			"type": "image/png",
-			"purpose": "maskable"
-		}
-	]
+   "name": "Octonotes",
+   "short_name": "Octo!",
+   "theme_color": "#000000",
+   "background_color": "#14A6EF",
+   "display": "standalone",
+   "orientation": "portrait",
+   "scope": "/",
+   "start_url": "/",
+   "icons": [
+      {
+         "src": "octo192.png",
+         "sizes": "192x192",
+         "type": "image/png"
+      },
+      {
+         "src": "octo256.png",
+         "sizes": "256x256",
+         "type": "image/png"
+      },
+      {
+         "src": "octo384.png",
+         "sizes": "384x384",
+         "type": "image/png"
+      },
+      {
+         "src": "/octo512.png",
+         "sizes": "512x512",
+         "type": "image/png"
+      },
+      {
+         "src": "/octo384.png",
+         "sizes": "384x384",
+         "type": "image/png",
+         "purpose": "maskable"
+      }
+   ]
 }

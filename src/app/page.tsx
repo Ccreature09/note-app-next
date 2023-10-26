@@ -41,11 +41,6 @@ export default function Home() {
                console.error('Service Worker registration failed:', error);
             });
       }
-      if ('Notification' in window) {
-         Notification.requestPermission().then((permission) => {
-            setNotificationPermission(permission);
-         });
-      }
    }, []);
 
    return (
